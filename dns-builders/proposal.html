@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>ads4you × DNS Builders — Proposal AFY-DNS-2026-001</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --g:#C9A84C;--g2:#F5D98A;--dark:#050709;--navy:#07111E;
+  --c1:#0A1220;--c2:#0F1A2E;--red:#FF3B3B;--grn:#00C896;
+  --ora:#E8651A;--blu:#3B82F6;--pur:#8B5CF6;
+  --w:#EDE8DF;--mu:#4A6280;--bdr:rgba(201,168,76,.12);
+  --D:'Unbounded',sans-serif;--B:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--dark);color:var(--w);font-family:var(--B);overflow-x:hidden;cursor:none;}
+::selection{background:var(--g);color:var(--dark);}
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--g),var(--ora));}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;background:var(--g);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
+#cur2{position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
+@media(max-width:768px){#cur,#cur2{display:none;}}
+
+/* SCROLL PROGRESS */
+#sprog{position:fixed;left:0;top:0;width:3px;height:0%;background:linear-gradient(180deg,var(--g),var(--ora),var(--red));z-index:888;}
+
+/* LOADER */
+#ldr{position:fixed;inset:0;z-index:99999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+#lpct{font-family:var(--D);font-size:5.5rem;color:var(--g);line-height:1;min-width:3ch;text-align:center;}
+.lbar{width:180px;height:1px;background:rgba(255,255,255,.07);}
+.lfill{height:100%;background:linear-gradient(90deg,var(--g),var(--ora));width:0%;}
+.ltxt{font-size:.52rem;color:var(--mu);letter-spacing:4px;text-transform:uppercase;}
+.lsub{font-size:.6rem;color:rgba(201,168,76,.4);letter-spacing:2px;}
+
+/* NAV */
+#nav{position:fixed;inset:0 0 auto;z-index:500;height:58px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;}
+#nav.s{background:rgba(5,7,9,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr);}
+.nl{font-family:var(--D);font-size:.6rem;letter-spacing:2px;display:flex;align-items:center;gap:9px;}
+.nd{width:6px;height:6px;border-radius:50%;background:var(--g);animation:ndp 2s ease-in-out infinite;}
+@keyframes ndp{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.5);}50%{box-shadow:0 0 0 7px rgba(201,168,76,0);}}
+.nc{background:var(--g);color:var(--dark);font-family:var(--D);font-size:.56rem;font-weight:700;letter-spacing:1px;padding:8px 18px;text-decoration:none;transition:all .25s;clip-path:polygon(0 0,calc(100%-7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100%-7px));}
+.nc:hover{background:var(--g2);}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+#hero{min-height:100svh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 24px 60px;}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);background-size:48px 48px;}
+.hglow{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(201,168,76,.055) 0%,transparent 70%);pointer-events:none;}
+.hredglow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(255,59,59,.04) 0%,transparent 70%);pointer-events:none;}
+.hcont{position:relative;z-index:2;max-width:820px;}
+.hfrom{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.08);border:1px solid var(--bdr);font-size:.55rem;color:var(--g);letter-spacing:3px;text-transform:uppercase;padding:6px 16px;margin-bottom:10px;opacity:0;}
+.hfrom::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--g);animation:ndp 1.5s ease-in-out infinite;}
+.hto{display:block;font-size:.72rem;color:var(--mu);margin-bottom:22px;letter-spacing:1px;opacity:0;}
+.hh1{font-family:var(--D);font-size:clamp(2.2rem,6.5vw,5.5rem);font-weight:900;line-height:.88;letter-spacing:-2px;margin-bottom:22px;}
+.hline{display:block;overflow:hidden;}
+.hw{display:inline-block;transform:translateY(115%);}
+.hgold{color:var(--g);}
+.hred{color:var(--red);}
+.hdesc{font-size:clamp(.8rem,.9vw,.92rem);color:rgba(237,232,223,.58);line-height:1.85;max-width:540px;margin:0 auto 32px;opacity:0;}
+.hbtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;opacity:0;}
+.btnp{display:inline-flex;align-items:center;gap:8px;background:var(--g);color:var(--dark);font-family:var(--D);font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:13px 26px;text-decoration:none;transition:all .3s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));box-shadow:0 0 28px rgba(201,168,76,.25);animation:heartbeat 1.8s ease-in-out infinite;}
+@keyframes heartbeat{0%,100%{box-shadow:0 0 28px rgba(201,168,76,.25);}50%{box-shadow:0 0 48px rgba(201,168,76,.5);}}
+.btnp:hover{background:var(--g2);transform:translateY(-2px);}
+.btng{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.18);color:var(--w);font-family:var(--D);font-size:.58rem;letter-spacing:1px;text-transform:uppercase;padding:13px 26px;text-decoration:none;transition:all .3s;}
+.btng:hover{border-color:var(--g);color:var(--g);}
+.hmeta{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;opacity:0;}
+.hm{font-size:.58rem;color:var(--mu);display:flex;align-items:center;gap:6px;}
+.hm span{color:var(--w);}
+
+/* ══════════════════════════════════════
+   TICKER
+══════════════════════════════════════ */
+.ticker{background:rgba(255,59,59,.06);border-top:1px solid rgba(255,59,59,.15);border-bottom:1px solid rgba(255,59,59,.15);overflow:hidden;padding:12px 0;}
+.tkt{display:flex;animation:tkr 20s linear infinite;white-space:nowrap;}
+.tkt:hover{animation-play-state:paused;}
+@keyframes tkr{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.tki{font-family:var(--D);font-size:.6rem;color:rgba(255,100,100,.8);letter-spacing:2px;text-transform:uppercase;padding:0 24px;display:inline-flex;align-items:center;gap:10px;}
+.tki::after{content:'·';}
+
+/* ══════════════════════════════════════
+   SECTIONS
+══════════════════════════════════════ */
+.S{padding:100px 32px 80px;max-width:1280px;margin:0 auto;}
+@media(max-width:768px){.S{padding:72px 20px 60px;}}
+.slb{display:inline-flex;align-items:center;gap:10px;font-size:.54rem;color:var(--g);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;}
+.slb::before{content:'';width:26px;height:1px;background:var(--g);}
+.sh2{font-family:var(--D);font-size:clamp(1.7rem,3.8vw,3.2rem);font-weight:900;line-height:.92;letter-spacing:-1px;margin-bottom:14px;}
+.sh2 i{color:var(--g);font-style:italic;font-family:var(--B);}
+.sp{color:var(--mu);font-size:.86rem;line-height:1.85;max-width:580px;margin-bottom:48px;}
+.hdiv{height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);margin:0 32px;}
+@media(max-width:600px){.hdiv{margin:0 20px;}}
+
+/* ══════════════════════════════════════
+   PAIN CARDS WITH SVG ANIMATIONS
+══════════════════════════════════════ */
+.pain-grid{display:grid;gap:16px;}
+@media(min-width:700px){.pain-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:1100px){.pain-grid{grid-template-columns:1fr 1fr 1fr;}}
+
+.pcard{
+  background:#0D0608;
+  border:1px solid rgba(255,59,59,.15);
+  border-left:3px solid var(--red);
+  padding:28px 24px 24px;
+  position:relative;overflow:hidden;
+  transition:all .35s;
+}
+.pcard:hover{
+  background:#100608;
+  box-shadow:0 0 50px rgba(255,59,59,.12);
+  transform:translateY(-3px);
+}
+.pcard::before{
+  content:'';position:absolute;top:0;right:0;
+  width:60px;height:60px;
+  background:radial-gradient(circle,rgba(255,59,59,.08),transparent 70%);
+}
+.pdot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;margin-right:8px;animation:pdotp 1.2s ease-in-out infinite;}
+@keyframes pdotp{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.6);}}
+.pnum{font-family:var(--D);font-size:3.5rem;color:rgba(255,59,59,.06);position:absolute;top:12px;right:16px;line-height:1;font-weight:900;}
+.pscene{width:100%;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;}
+.ptitle{font-family:var(--D);font-size:.82rem;font-weight:700;color:var(--w);margin-bottom:8px;line-height:1.3;}
+.pdesc{font-size:.75rem;color:var(--mu);line-height:1.7;}
+.pemo{font-size:1.1rem;margin-bottom:10px;display:block;}
+
+/* ── STICK FIGURE BASE STYLES ── */
+svg.scene{overflow:visible;}
+.stick-body{stroke:#EDE8DF;stroke-width:2;fill:none;stroke-linecap:round;}
+.stick-head{fill:none;stroke:#EDE8DF;stroke-width:2;}
+.stick-hard-hat{fill:var(--g);stroke:none;}
+.stick-gold{stroke:var(--g);stroke-width:2;fill:none;stroke-linecap:round;}
+.stick-red{stroke:var(--red);stroke-width:2;fill:none;stroke-linecap:round;}
+.stick-green{stroke:var(--grn);stroke-width:2;fill:none;stroke-linecap:round;}
+
+/* ── SCENE 1: GHOST / INVISIBLE MAN ── */
+@keyframes ghostFade{0%,100%{opacity:1;}40%,60%{opacity:.1;}}
+@keyframes armFrustrate{0%,100%{transform:rotate(0deg);}25%{transform:rotate(30deg);}75%{transform:rotate(-30deg);}}
+@keyframes walkAcross{0%{transform:translateX(-60px);}100%{transform:translateX(60px);}}
+@keyframes crowdWalk{0%{transform:translateX(80px);}100%{transform:translateX(-80px);}}
+.ghost-fig{animation:ghostFade 3s ease-in-out infinite;}
+.arm-l{transform-origin:30px 45px;animation:armFrustrate 1s ease-in-out infinite;}
+.arm-r{transform-origin:30px 45px;animation:armFrustrate 1s ease-in-out infinite .5s;}
+.crowd-person{animation:crowdWalk 4s linear infinite;}
+
+/* ── SCENE 2: VANISHING LEAD ── */
+@keyframes phoneShake{0%,100%{transform:rotate(0);}20%{transform:rotate(-8deg);}40%{transform:rotate(8deg);}60%{transform:rotate(-5deg);}80%{transform:rotate(5deg);}}
+@keyframes personWalkOff{0%,30%{transform:translateX(0);opacity:1;}80%,100%{transform:translateX(60px);opacity:0;}}
+@keyframes headDrop{0%,60%{transform:translateY(0);}80%,100%{transform:translateY(6px);}}
+@keyframes moneyFly{0%,50%{transform:translateX(0) translateY(0);opacity:1;}100%{transform:translateX(40px) translateY(-20px);opacity:0;}}
+.phone-ico{animation:phoneShake 2s ease-in-out infinite;}
+.lead-person{animation:personWalkOff 4s ease-in-out infinite;}
+.sad-head{transform-origin:50px 35px;animation:headDrop 4s ease-in-out infinite;}
+.money-fly{animation:moneyFly 3s ease-in-out infinite 2s;}
+
+/* ── SCENE 3: CASH BLINDNESS ── */
+@keyframes spinConfused{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+@keyframes moneyIn{0%{transform:translateX(-50px);opacity:0;}30%,60%{transform:translateX(0);opacity:1;}100%{transform:translateX(-50px);opacity:0;}}
+@keyframes moneyOut{0%,40%{transform:translateX(0);opacity:0;}70%{transform:translateX(50px);opacity:1;}100%{transform:translateX(80px);opacity:0;}}
+@keyframes qOrbit{0%{transform:rotate(0deg) translateX(35px) rotate(0deg);}100%{transform:rotate(360deg) translateX(35px) rotate(-360deg);}}
+.spin-fig{transform-origin:70px 55px;animation:spinConfused 3s linear infinite;}
+.blindfold{fill:rgba(255,59,59,.4);}
+.money-bag-in{animation:moneyIn 3s ease-in-out infinite;}
+.money-bag-out{animation:moneyOut 3s ease-in-out infinite .5s;}
+.q-orbit{transform-origin:70px 55px;animation:qOrbit 3s linear infinite;}
+
+/* ── SCENE 4: NO PORTFOLIO ── */
+@keyframes headShake{0%,100%{transform:rotate(0);}25%{transform:rotate(-10deg);}75%{transform:rotate(10deg);}}
+@keyframes clientWalk{0%,40%{transform:translateX(0);opacity:1;}80%,100%{transform:translateX(50px);opacity:0;}}
+@keyframes paperCrumple{0%,60%{transform:scale(1);}80%,100%{transform:scale(.3);opacity:0;}}
+.client-head{transform-origin:80px 35px;animation:headShake 3s ease-in-out infinite 1.5s;}
+.client-fig{animation:clientWalk 4s ease-in-out infinite;}
+.paper{animation:paperCrumple 4s ease-in-out infinite 2s;}
+
+/* ── SCENE 5: COMPETITOR STEALS LEADS ── */
+@keyframes pinBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes pinGrey{0%,100%{opacity:.2;}50%{opacity:.4;}}
+@keyframes arrowRain{0%{transform:translateY(-30px);opacity:0;}50%{opacity:1;}100%{transform:translateY(30px);opacity:0;}}
+@keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(0,200,150,.8));}50%{filter:drop-shadow(0 0 16px rgba(0,200,150,1));}}
+.green-pin{animation:pinBounce 1s ease-in-out infinite,glowPulse 1.5s ease-in-out infinite;fill:var(--grn);}
+.grey-pin{animation:pinGrey 2s ease-in-out infinite;fill:rgba(100,120,150,.4);}
+.arrow1{animation:arrowRain 1.5s ease-in-out infinite;}
+.arrow2{animation:arrowRain 1.5s ease-in-out infinite .4s;}
+.arrow3{animation:arrowRain 1.5s ease-in-out infinite .8s;}
+
+/* ── SCENE 6: OVERWHELMED / DROWNING ── */
+@keyframes armSpin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+@keyframes dizzy{0%,60%{transform:rotate(0deg);}70%{transform:rotate(-20deg);}80%{transform:rotate(20deg);}90%{transform:rotate(-10deg);}100%{transform:rotate(0deg);}}
+@keyframes starBurst{0%,60%{opacity:0;transform:scale(0);}70%,80%{opacity:1;transform:scale(1.2);}100%{opacity:0;transform:scale(.5);}}
+.multi-arm{transform-origin:60px 45px;animation:armSpin 1.5s linear infinite;}
+.multi-arm.slow{animation-duration:3s;}
+.dizzy-fig{transform-origin:60px 60px;animation:dizzy 4s ease-in-out infinite 2s;}
+.star-burst{animation:starBurst 4s ease-in-out infinite 2.5s;}
+
+/* ══════════════════════════════════════
+   OPPORTUNITY STATS
+══════════════════════════════════════ */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--bdr);}
+@media(min-width:600px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+.stat{background:var(--c1);padding:36px 20px;text-align:center;transition:background .3s;}
+.stat:hover{background:var(--c2);}
+.stat-n{font-family:var(--D);font-size:2.8rem;color:var(--g);line-height:1;font-weight:900;}
+.stat-l{font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:2px;margin-top:8px;}
+
+/* ══════════════════════════════════════
+   SOLUTION OVERVIEW
+══════════════════════════════════════ */
+.wordflip{display:inline-block;height:1.2em;overflow:hidden;vertical-align:bottom;min-width:200px;}
+.wf-inner{display:flex;flex-direction:column;animation:wflip 6s ease-in-out infinite;}
+@keyframes wflip{
+  0%,20%{transform:translateY(0);}
+  25%,45%{transform:translateY(-1.2em);}
+  50%,70%{transform:translateY(-2.4em);}
+  75%,95%{transform:translateY(-3.6em);}
+  100%{transform:translateY(0);}
+}
+.wfw{display:block;color:var(--g);height:1.2em;line-height:1.2;}
+
+/* ══════════════════════════════════════
+   BLUEPRINT CARDS
+══════════════════════════════════════ */
+.bp-grid{display:grid;gap:14px;}
+@media(min-width:700px){.bp-grid{grid-template-columns:1fr 1fr;}}
+.bpcard{
+  background:var(--c1);border:1px solid var(--bdr);
+  padding:32px 28px;position:relative;overflow:hidden;
+  transition:all .35s;
+}
+.bpcard:hover{background:var(--c2);border-color:rgba(201,168,76,.25);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.bpcard::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.06),transparent);
+  transform:translateX(-100%);transition:transform .6s ease;
+}
+.bpcard:hover::after{transform:translateX(100%);}
+.bp-icon{font-size:2.8rem;display:block;margin-bottom:16px;}
+.bp-num{font-family:var(--D);font-size:4.5rem;color:rgba(201,168,76,.05);position:absolute;top:16px;right:20px;line-height:1;font-weight:900;}
+.bp-title{font-family:var(--D);font-size:.95rem;font-weight:700;margin-bottom:8px;line-height:1.2;}
+.bp-sub{font-size:.62rem;color:var(--g);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.bp-desc{font-size:.78rem;color:var(--mu);line-height:1.75;}
+.bp-result{margin-top:14px;padding:10px 14px;background:rgba(201,168,76,.06);border-left:2px solid var(--g);font-size:.72rem;color:var(--w);line-height:1.6;}
+.bp-result strong{color:var(--g);}
+
+/* ══════════════════════════════════════
+   ROADMAP — ANIMATED TIMELINE
+══════════════════════════════════════ */
+.timeline{position:relative;padding-left:48px;}
+@media(min-width:768px){.timeline{padding-left:60px;}}
+.tl-line{position:absolute;left:18px;top:0;bottom:0;width:2px;background:rgba(201,168,76,.1);}
+@media(min-width:768px){.tl-line{left:24px;}}
+.tl-fill{position:absolute;left:18px;top:0;width:2px;height:0%;background:linear-gradient(180deg,var(--g),var(--ora));transition:height .1s;}
+@media(min-width:768px){.tl-fill{left:24px;}}
+.tl-item{position:relative;margin-bottom:36px;padding:0 0 0 20px;}
+.tl-dot{position:absolute;left:-38px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--g);background:var(--dark);transition:all .4s;}
+@media(min-width:768px){.tl-dot{left:-46px;}}
+.tl-item.active .tl-dot{background:var(--g);box-shadow:0 0 16px rgba(201,168,76,.6);}
+.tl-week{font-size:.55rem;color:var(--g);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+.tl-title{font-family:var(--D);font-size:.88rem;font-weight:700;margin-bottom:6px;}
+.tl-tasks{display:flex;flex-direction:column;gap:4px;}
+.tl-task{font-size:.72rem;color:var(--mu);display:flex;align-items:center;gap:8px;}
+.tl-task::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--g);flex-shrink:0;}
+
+/* ══════════════════════════════════════
+   VISION BOARD — THE KEY SECTION
+══════════════════════════════════════ */
+.vb-wrapper{
+  background:linear-gradient(135deg,#060D1A 0%,#040709 50%,#08060A 100%);
+  border:1px solid rgba(201,168,76,.18);
+  border-radius:4px;
+  overflow:hidden;
+  position:relative;
+}
+.vb-top{
+  background:linear-gradient(90deg,var(--g),var(--ora));
+  padding:20px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.vb-top-title{font-family:var(--D);font-size:.75rem;color:var(--dark);font-weight:900;letter-spacing:2px;text-transform:uppercase;}
+.vb-top-sub{font-size:.65rem;color:rgba(0,0,0,.6);letter-spacing:1px;}
+.vb-months{display:grid;gap:2px;padding:2px;}
+@media(min-width:600px){.vb-months{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:900px){.vb-months{grid-template-columns:repeat(3,1fr);}}
+.vb-month{background:var(--c1);padding:22px 20px;transition:background .3s;position:relative;overflow:hidden;}
+.vb-month:hover{background:var(--c2);}
+.vbm-period{font-size:.52rem;color:var(--g);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.vbm-title{font-family:var(--D);font-size:.78rem;font-weight:700;margin-bottom:10px;color:var(--w);}
+.vbm-items{display:flex;flex-direction:column;gap:5px;}
+.vbm-item{font-size:.7rem;color:var(--mu);display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.vbm-item::before{content:'→';color:var(--g);flex-shrink:0;font-family:var(--D);}
+.vbm-highlight{color:var(--w);}
+.vbm-num{font-family:var(--D);font-size:1.4rem;color:var(--g);font-weight:900;margin-top:10px;}
+.vbm-numl{font-size:.55rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;}
+.vb-year-end{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(232,101,26,.08));border-top:2px solid var(--g);padding:28px 32px;text-align:center;}
+.vby-title{font-family:var(--D);font-size:1.1rem;color:var(--g);margin-bottom:16px;}
+.vby-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:32px;}
+.vby-s{text-align:center;}
+.vby-n{font-family:var(--D);font-size:2.4rem;color:var(--w);font-weight:900;}
+.vby-l{font-size:.55rem;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;}
+.vb-disclaimer{font-size:.62rem;color:rgba(74,98,128,.6);text-align:center;padding:14px 20px;border-top:1px solid var(--bdr);font-style:italic;}
+
+/* ══════════════════════════════════════
+   PRICING
+══════════════════════════════════════ */
+.price-grid{display:grid;gap:14px;}
+@media(min-width:700px){.price-grid{grid-template-columns:1fr 1fr 1fr;}}
+.pricebox{
+  background:var(--c1);border:1px solid var(--bdr);
+  padding:32px 24px;position:relative;
+  transition:all .35s;
+}
+.pricebox:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.pricebox.featured{border-color:rgba(201,168,76,.4);background:linear-gradient(135deg,var(--c2),#0A1428);}
+.pricebox.featured::before{content:'RECOMMENDED';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--g);color:var(--dark);font-family:var(--D);font-size:.5rem;font-weight:900;letter-spacing:2px;padding:4px 14px;text-transform:uppercase;}
+.price-tier{font-size:.58rem;color:var(--g);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;}
+.price-name{font-family:var(--D);font-size:1.1rem;font-weight:700;margin-bottom:6px;}
+.price-desc{font-size:.7rem;color:var(--mu);margin-bottom:20px;line-height:1.6;}
+.price-amount{font-family:var(--D);font-size:2rem;color:var(--w);font-weight:900;margin-bottom:4px;}
+.price-amount span{font-size:1rem;color:var(--g);}
+.price-per{font-size:.6rem;color:var(--mu);margin-bottom:20px;}
+.price-items{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.pi{font-size:.72rem;color:var(--mu);display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.pi-check{color:var(--grn);flex-shrink:0;font-size:.8rem;}
+.pi-x{color:rgba(255,59,59,.4);flex-shrink:0;}
+.price-cta{display:block;text-align:center;padding:12px;border:1px solid var(--g);color:var(--g);font-family:var(--D);font-size:.58rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all .3s;}
+.price-cta:hover,.pricebox.featured .price-cta{background:var(--g);color:var(--dark);}
+.price-note{font-size:.62rem;color:var(--mu);text-align:center;margin-top:20px;line-height:1.7;padding:16px;background:rgba(201,168,76,.04);border:1px solid var(--bdr);}
+
+/* ══════════════════════════════════════
+   WHY ads4you
+══════════════════════════════════════ */
+.trust-grid{display:grid;gap:10px;}
+@media(min-width:600px){.trust-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:900px){.trust-grid{grid-template-columns:repeat(3,1fr);}}
+.tcred{background:var(--c1);border:1px solid var(--bdr);border-left:2px solid var(--ora);padding:20px 18px;transition:all .3s;}
+.tcred:hover{background:var(--c2);transform:translateX(4px);}
+.tcred-i{font-size:1.5rem;margin-bottom:8px;}
+.tcred-t{font-family:var(--D);font-size:.72rem;font-weight:700;margin-bottom:5px;}
+.tcred-d{font-size:.68rem;color:var(--mu);line-height:1.6;}
+
+/* ══════════════════════════════════════
+   FINAL CTA
+══════════════════════════════════════ */
+.ctabox{
+  background:linear-gradient(135deg,var(--navy),var(--dark));
+  border:1px solid rgba(201,168,76,.2);
+  padding:80px 40px;text-align:center;position:relative;overflow:hidden;
+}
+@media(max-width:768px){.ctabox{padding:52px 20px;}}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(201,168,76,.06) 0%,transparent 70%);pointer-events:none;}
+.cta-h{font-family:var(--D);font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;letter-spacing:-1.5px;line-height:.9;margin-bottom:18px;}
+.cta-p{color:var(--mu);font-size:.88rem;line-height:1.8;max-width:480px;margin:0 auto 36px;}
+.cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:32px;}
+.cta-wa{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;font-family:var(--D);font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:16px 32px;text-decoration:none;transition:all .3s;border-radius:4px;position:relative;overflow:hidden;}
+.cta-wa:hover{background:#20bd5a;transform:translateY(-2px);box-shadow:0 8px 40px rgba(37,211,102,.4);}
+.cta-call{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--w);font-family:var(--D);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;padding:16px 32px;text-decoration:none;transition:all .3s;border:1px solid var(--bdr);}
+.cta-call:hover{border-color:var(--g);color:var(--g);}
+.emoji-burst{position:absolute;pointer-events:none;font-size:1.2rem;animation:eburst .8s ease-out forwards;}
+@keyframes eburst{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--ex),var(--ey)) scale(0);}}
+.cta-ref{font-size:.58rem;color:rgba(74,98,128,.5);margin-top:16px;letter-spacing:1px;}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{border-top:1px solid var(--bdr);padding:24px 32px;text-align:center;}
+footer p{font-size:.58rem;color:var(--mu);line-height:1.8;}
+footer a{color:var(--g);text-decoration:none;}
+
+/* ══════════════════════════════════════
+   REVEAL ANIMATIONS
+══════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(32px);}
+.rvl{opacity:0;transform:translateX(-36px);}
+.rvr{opacity:0;transform:translateX(36px);}
+.rvs{opacity:0;transform:scale(.94);}
+</style>
+</head>
+<body>
+
+<div id="ldr" style="position:fixed;inset:0;background:#050709;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
+  <div id="lpct" style="font-family:'Unbounded',sans-serif;font-size:5rem;color:#C9A84C;line-height:1;min-width:3ch;text-align:center;">0</div>
+  <div style="width:200px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;">
+    <div id="lfill" style="height:100%;width:0%;background:#C9A84C;"></div>
+  </div>
+  <div style="font-size:.52rem;color:#4A6280;letter-spacing:4px;text-transform:uppercase;margin-top:4px;">Growing Your Business with AI</div>
+  <div style="font-size:.48rem;color:rgba(74,98,128,.5);letter-spacing:2px;">Proposal AFY-DNS-2026-001</div>
+</div>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="sprog"></div>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nl"><div class="nd"></div>ads4you × DNS</div>
+  <a class="nc" href="https://wa.me/919767066941">WhatsApp Prashant</a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <div class="hgrid"></div>
+  <div class="hglow"></div>
+  <div class="hredglow"></div>
+  <div class="hcont">
+    <div class="hfrom" id="hfrom">From: Prashant Handge · ads4you AI Studio</div>
+    <div class="hto" id="hto">Personal Proposal for Dhiraj N. Sarwade · DNS Builders & Radhika Enterprises</div>
+    <h1 class="hh1">
+      <span class="hline"><span class="hw">Dhiraj,</span></span>
+      <span class="hline"><span class="hw">Your Work</span></span>
+      <span class="hline"><span class="hw hgold">Deserves</span></span>
+      <span class="hline"><span class="hw">to be Seen.</span></span>
+    </h1>
+    <p class="hdesc" id="hdesc">10 years of quality construction. Celebrity projects. Buildings that families call home. And yet — Google shows nothing. WhatsApp leads disappear. Cash tracked in a diary. This changes now.</p>
+    <div class="hbtns" id="hbtns">
+      <a class="btnp" href="https://wa.me/919767066941">💬 Talk to Prashant</a>
+      <a class="btng" href="tel:+919767066941">📞 9767066941</a>
+    </div>
+    <div class="hmeta" id="hmeta">
+      <div class="hm">📋 Ref: <span>AFY-DNS-2026-001</span></div>
+      <div class="hm">📅 Valid: <span>30 Days</span></div>
+      <div class="hm">🏙️ For: <span>PCMC · Pune</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker">
+  <div class="tkt" id="tkt">
+    <span class="tki">Google shows zero results for DNS Builders</span>
+    <span class="tki">50+ PCMC clients searching "contractor" daily — finding your competitors</span>
+    <span class="tki">Leads calling, not following up, never converting</span>
+    <span class="tki">₹2 lakh slipping through the cracks every month</span>
+    <span class="tki">Your celebrity project — but nobody knows about it</span>
+    <span class="tki">Running two companies entirely in your head</span>
+    <span class="tki">Google shows zero results for DNS Builders</span>
+    <span class="tki">50+ PCMC clients searching "contractor" daily — finding your competitors</span>
+    <span class="tki">Leads calling, not following up, never converting</span>
+    <span class="tki">₹2 lakh slipping through the cracks every month</span>
+    <span class="tki">Your celebrity project — but nobody knows about it</span>
+    <span class="tki">Running two companies entirely in your head</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     THE PAIN — 6 ANIMATED SCENES
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">The Real Problem</div>
+  <h2 class="sh2 rv">Your Business Has a <i>Hidden Crisis.</i></h2>
+  <p class="sp rv">Not because your work is bad — it's excellent. But right now, six problems are silently costing you lakhs every month. Let's be honest about each one.</p>
+
+  <div class="pain-grid">
+
+    <!-- PAIN 1: INVISIBLE -->
+    <div class="pcard rv">
+      <div class="pnum">01</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Builder ghost figure -->
+          <g class="ghost-fig" transform="translate(70,10)">
+            <circle class="stick-head" cx="30" cy="20" r="12"/>
+            <!-- Hard hat -->
+            <path class="stick-hard-hat" d="M18,14 Q30,4 42,14 L40,18 Q30,10 20,18 Z"/>
+            <line class="stick-body" x1="30" y1="32" x2="30" y2="70"/>
+            <!-- Arms frustrated -->
+            <line class="arm-l stick-body" x1="30" y1="44" x2="10" y2="34"/>
+            <line class="arm-r stick-body" x1="30" y1="44" x2="50" y2="34"/>
+            <line class="stick-body" x1="30" y1="70" x2="18" y2="95"/>
+            <line class="stick-body" x1="30" y1="70" x2="42" y2="95"/>
+          </g>
+          <!-- Crowd walking through ghost -->
+          <g class="crowd-person" opacity=".5">
+            <circle cx="160" cy="30" r="8" stroke="#4A6280" stroke-width="1.5" fill="none"/>
+            <line x1="160" y1="38" x2="160" y2="62" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="160" y1="48" x2="150" y2="40" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="160" y1="48" x2="170" y2="40" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="160" y1="62" x2="152" y2="80" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="160" y1="62" x2="168" y2="80" stroke="#4A6280" stroke-width="1.5"/>
+          </g>
+          <!-- Speech bubble: "Search DNS Builders" -->
+          <rect x="8" y="5" width="95" height="22" rx="4" fill="rgba(255,59,59,.12)" stroke="rgba(255,59,59,.3)" stroke-width="1"/>
+          <text x="55" y="20" text-anchor="middle" font-size="8" fill="#FF3B3B" font-family="Syne,sans-serif">🔍 "DNS Builders Pune" = 0</text>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>You Are Invisible Online</div>
+      <div class="pdesc">Search "DNS Builders Pune" on Google. Search "contractor Hinjewadi." Search "Radhika Enterprises PCMC." Nothing. Your 10 years of work does not exist on the internet. 50+ people search for contractors in your area every single day — and find someone else.</div>
+    </div>
+
+    <!-- PAIN 2: VANISHING LEAD -->
+    <div class="pcard rv">
+      <div class="pnum">02</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Our builder -->
+          <g transform="translate(20,10)">
+            <circle class="stick-head sad-head" cx="30" cy="20" r="12"/>
+            <line class="stick-body" x1="30" y1="32" x2="30" y2="65"/>
+            <!-- arm holding phone -->
+            <line class="stick-body" x1="30" y1="42" x2="50" y2="35"/>
+            <rect class="phone-ico" x="48" y="28" width="10" height="15" rx="2" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+            <line class="stick-body" x1="30" y1="42" x2="15" y2="38"/>
+            <line class="stick-body" x1="30" y1="65" x2="20" y2="85"/>
+            <line class="stick-body" x1="30" y1="65" x2="40" y2="85"/>
+          </g>
+          <!-- Lead person walking away -->
+          <g class="lead-person" transform="translate(80,10)">
+            <circle cx="30" cy="20" r="10" stroke="#4A6280" stroke-width="1.5" fill="none"/>
+            <line x1="30" y1="30" x2="30" y2="58" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="20" y2="34" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="40" y2="34" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="58" x2="22" y2="75" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="58" x2="38" y2="75" stroke="#4A6280" stroke-width="1.5"/>
+          </g>
+          <!-- Money flying away -->
+          <g class="money-fly">
+            <text x="140" y="50" font-size="18" fill="rgba(201,168,76,.5)">💸</text>
+          </g>
+          <!-- Label -->
+          <text x="100" y="120" text-anchor="middle" font-size="8.5" fill="rgba(255,59,59,.6)" font-family="Syne,sans-serif">"I'll think about it..." → Gone forever</text>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>Leads Vanish Without Follow-Up</div>
+      <div class="pdesc">A client calls. Shows interest. Says "I'll get back to you." Without an automated follow-up system, that ₹20–50 lakh project disappears. Research shows 35–40% of Indian construction leads are lost because nobody followed up. That is your money walking out the door.</div>
+    </div>
+
+    <!-- PAIN 3: CASH BLINDNESS -->
+    <div class="pcard rv">
+      <div class="pnum">03</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Spinning confused businessman -->
+          <g class="spin-fig" transform="translate(70,10)">
+            <circle class="stick-head" cx="30" cy="20" r="12"/>
+            <!-- Blindfold -->
+            <rect class="blindfold" x="18" y="14" width="24" height="8" rx="4"/>
+            <line class="stick-body" x1="30" y1="32" x2="30" y2="65"/>
+            <line class="stick-body" x1="30" y1="44" x2="10" y2="36"/>
+            <line class="stick-body" x1="30" y1="44" x2="50" y2="36"/>
+            <line class="stick-body" x1="30" y1="65" x2="20" y2="85"/>
+            <line class="stick-body" x1="30" y1="65" x2="40" y2="85"/>
+          </g>
+          <!-- Money in from left -->
+          <g class="money-bag-in">
+            <text x="10" y="60" font-size="16">💰</text>
+            <text x="5" y="80" font-size="9" fill="rgba(0,200,150,.6)" font-family="Syne">+Income</text>
+          </g>
+          <!-- Money out to right -->
+          <g class="money-bag-out">
+            <text x="155" y="60" font-size="16">💸</text>
+            <text x="148" y="80" font-size="9" fill="rgba(255,59,59,.6)" font-family="Syne">-Expenses</text>
+          </g>
+          <!-- Orbiting question marks -->
+          <g class="q-orbit">
+            <text x="68" y="30" font-size="12" fill="rgba(255,59,59,.5)">₹?</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>Cash Flow is a Mystery</div>
+      <div class="pdesc">Two companies. Multiple projects. Vendor payments, labour wages, client advances, pending receivables, GST. All in a diary. All in WhatsApp messages. All in your memory. One missed follow-up costs ₹50,000. In a month — that is ₹1–2 lakh leaking silently.</div>
+    </div>
+
+    <!-- PAIN 4: NO PORTFOLIO -->
+    <div class="pcard rv">
+      <div class="pnum">04</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Builder shows portfolio -->
+          <g transform="translate(15,10)">
+            <circle class="stick-head" cx="30" cy="20" r="12"/>
+            <line class="stick-body" x1="30" y1="32" x2="30" y2="65"/>
+            <!-- Holding tiny paper -->
+            <line class="stick-body" x1="30" y1="42" x2="55" y2="38"/>
+            <rect class="paper" x="53" y="30" width="18" height="22" rx="2" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+            <line x1="56" y1="36" x2="68" y2="36" stroke="rgba(201,168,76,.4)" stroke-width="1"/>
+            <line x1="56" y1="41" x2="68" y2="41" stroke="rgba(201,168,76,.4)" stroke-width="1"/>
+            <line class="stick-body" x1="30" y1="42" x2="15" y2="38"/>
+            <line class="stick-body" x1="30" y1="65" x2="20" y2="85"/>
+            <line class="stick-body" x1="30" y1="65" x2="40" y2="85"/>
+          </g>
+          <!-- Client shaking head and walking away -->
+          <g class="client-fig" transform="translate(100,10)">
+            <circle class="stick-head client-head" cx="30" cy="20" r="10" stroke="#4A6280" stroke-width="1.5" fill="none"/>
+            <line x1="30" y1="30" x2="30" y2="58" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="20" y2="34" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="40" x2="40" y2="34" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="58" x2="22" y2="75" stroke="#4A6280" stroke-width="1.5"/>
+            <line x1="30" y1="58" x2="38" y2="75" stroke="#4A6280" stroke-width="1.5"/>
+          </g>
+          <text x="100" y="115" text-anchor="middle" font-size="9" fill="rgba(255,59,59,.5)" font-family="Syne">"Show me your portfolio..." 🙅</text>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>No Proof of Work</div>
+      <div class="pdesc">You built a celebrity's farmhouse. You delivered Pimpri Residency. Premium marble interiors, turnkey handovers. But when a new client asks "Can I see your past projects?" — what do you send? A WhatsApp album. That gap costs you every premium project.</div>
+    </div>
+
+    <!-- PAIN 5: COMPETITOR STEALS LEADS -->
+    <div class="pcard rv">
+      <div class="pnum">05</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Phone showing Google Maps -->
+          <rect x="65" y="5" width="70" height="110" rx="8" fill="rgba(10,18,32,.9)" stroke="rgba(201,168,76,.2)" stroke-width="1.5"/>
+          <rect x="69" y="16" width="62" height="72" rx="2" fill="rgba(7,17,30,.8)"/>
+          <!-- Map bg -->
+          <rect x="69" y="16" width="62" height="72" rx="2" fill="rgba(20,35,60,.5)"/>
+          <!-- Grid lines on map -->
+          <line x1="69" y1="36" x2="131" y2="36" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <line x1="69" y1="56" x2="131" y2="56" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <line x1="90" y1="16" x2="90" y2="88" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <line x1="110" y1="16" x2="110" y2="88" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+          <!-- Competitor pin (green, bouncing) -->
+          <g class="green-pin">
+            <circle cx="95" cy="55" r="8" fill="#00C896"/>
+            <text x="95" y="59" text-anchor="middle" font-size="8" fill="white" font-family="Syne" font-weight="700">C</text>
+          </g>
+          <!-- Your pin (grey, dim) -->
+          <g class="grey-pin">
+            <circle cx="115" cy="45" r="6"/>
+            <text x="115" y="49" text-anchor="middle" font-size="7" fill="white" font-family="Syne">D</text>
+          </g>
+          <!-- Arrows raining on competitor -->
+          <text class="arrow1" x="88" y="25" font-size="10" fill="var(--g)">📞</text>
+          <text class="arrow2" x="98" y="20" font-size="10" fill="var(--g)">📞</text>
+          <text class="arrow3" x="78" y="22" font-size="10" fill="var(--g)">📞</text>
+          <!-- Home button -->
+          <circle cx="100" cy="105" r="5" fill="none" stroke="rgba(201,168,76,.3)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>Competitors Get Your Calls</div>
+      <div class="pdesc">Other PCMC builders — some with less experience and lower quality than you — appear on Google, JustDial, IndiaMart. They get the calls you deserve. Not because their work is better. Because they are visible. That is the only difference.</div>
+    </div>
+
+    <!-- PAIN 6: OVERWHELMED -->
+    <div class="pcard rv">
+      <div class="pnum">06</div>
+      <div class="pscene">
+        <svg class="scene" width="200" height="130" viewBox="0 0 200 130">
+          <!-- Multi-arm spinning figure -->
+          <g class="dizzy-fig" transform="translate(60,10)">
+            <circle class="stick-head" cx="40" cy="22" r="13"/>
+            <!-- Dizzy eyes -->
+            <text x="40" y="26" text-anchor="middle" font-size="9" fill="rgba(237,232,223,.7)">😵</text>
+            <line class="stick-body" x1="40" y1="35" x2="40" y2="68"/>
+            <!-- Multiple arms in different directions -->
+            <g class="multi-arm">
+              <!-- Phone arm -->
+              <line x1="40" y1="46" x2="62" y2="34" stroke="#C9A84C" stroke-width="2" stroke-linecap="round"/>
+              <text x="64" y="32" font-size="9" fill="#C9A84C">📞</text>
+            </g>
+            <g class="multi-arm slow">
+              <!-- Wrench arm -->
+              <line x1="40" y1="46" x2="18" y2="34" stroke="#E8651A" stroke-width="2" stroke-linecap="round"/>
+              <text x="6" y="32" font-size="9" fill="#E8651A">🔧</text>
+            </g>
+            <!-- Calculator arm pointing down-right -->
+            <line x1="40" y1="52" x2="62" y2="60" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/>
+            <text x="63" y="64" font-size="9" fill="#3B82F6">🧮</text>
+            <!-- Clipboard arm pointing down-left -->
+            <line x1="40" y1="52" x2="18" y2="60" stroke="#00C896" stroke-width="2" stroke-linecap="round"/>
+            <text x="4" y="64" font-size="9" fill="#00C896">📋</text>
+            <line class="stick-body" x1="40" y1="68" x2="30" y2="88"/>
+            <line class="stick-body" x1="40" y1="68" x2="50" y2="88"/>
+          </g>
+          <!-- Star burst dizzy stars -->
+          <g class="star-burst">
+            <text x="140" y="40" font-size="14" fill="rgba(255,200,0,.7)">⭐</text>
+            <text x="20" y="80" font-size="12" fill="rgba(255,200,0,.5)">✨</text>
+            <text x="145" y="80" font-size="10" fill="rgba(255,200,0,.4)">⭐</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ptitle"><span class="pdot"></span>You Are Doing Everything Alone</div>
+      <div class="pdesc">CEO. Site manager. Accountant. Sales team. Client manager. Labour supervisor. All in one person. All day, every day. The result: important things slip. Replies are delayed. Decisions are rushed. And your best work — the quality you're known for — gets less of your energy.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OPPORTUNITY
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">The Market Opportunity</div>
+  <h2 class="sh2 rv">PCMC is Growing. <i>Are You Capturing It?</i></h2>
+  <p class="sp rv">Pimpri-Chinchwad is one of India's fastest growing urban areas. The construction demand is real. The money is there. The question is: who captures it?</p>
+  <div class="stat-grid rv">
+    <div class="stat"><div class="stat-n" data-count="50" data-sfx="+">0</div><div class="stat-l">Daily PCMC searches for "contractor near me"</div></div>
+    <div class="stat"><div class="stat-n" data-count="70" data-sfx="%">0</div><div class="stat-l">PCMC contractors with zero digital presence</div></div>
+    <div class="stat"><div class="stat-n" data-count="40" data-sfx="%">0</div><div class="stat-l">Leads lost due to no follow-up system</div></div>
+    <div class="stat"><div class="stat-n">₹80K<span style="font-size:1.2rem">Cr</span></div><div class="stat-l">Pune real estate annual market size</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SOLUTION OVERVIEW
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S" style="text-align:center;">
+  <div class="slb rv" style="justify-content:center;display:flex;">The Solution</div>
+  <h2 class="sh2 rv" style="max-width:700px;margin:0 auto 16px;">What if all 6 problems had<br><i>one answer?</i></h2>
+  <p class="sp rv" style="margin:0 auto 20px;">ads4you builds you a complete AI-powered business system. In 30 days, DNS Builders goes from invisible to unstoppable. Your business becomes</p>
+  <div class="sh2 rv" style="font-size:clamp(1.4rem,3vw,2.5rem);margin-bottom:48px;">
+    <div class="wordflip">
+      <div class="wf-inner">
+        <span class="wfw">FOUND.</span>
+        <span class="wfw">TRUSTED.</span>
+        <span class="wfw">AUTOMATED.</span>
+        <span class="wfw">GROWING.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     4 BLUEPRINTS
+══════════════════════════════════════ -->
+<div class="S" style="padding-top:0;">
+  <div class="bp-grid">
+
+    <div class="bpcard rv">
+      <div class="bp-num">01</div>
+      <div class="bp-icon">🌐</div>
+      <div class="bp-sub">Blueprint 1</div>
+      <div class="bp-title">AI Digital Presence Engine</div>
+      <div class="bp-desc">We build your complete digital identity — Google Business Profile, JustDial, IndiaMart, Sulekha listings, SEO-optimised project pages. Then 12–16 AI-generated content posts every month showcase your real work to PCMC audiences actively searching for contractors.</div>
+      <div class="bp-result">
+        <strong>Result:</strong> When anyone in PCMC searches "best contractor near me" — DNS Builders appears. Every time. From month 2 onwards, real enquiries start arriving from people who found you on Google.
+      </div>
+    </div>
+
+    <div class="bpcard rv">
+      <div class="bp-num">02</div>
+      <div class="bp-icon">🤖</div>
+      <div class="bp-sub">Blueprint 2</div>
+      <div class="bp-title">WhatsApp AI Lead Bot</div>
+      <div class="bp-desc">Every enquiry gets an instant reply in under 30 seconds — even at 2 AM. The bot qualifies the lead, sends your portfolio, asks about budget, and follows up automatically on Day 2, 5, 10, 20, and 30. Cold leads get a 60-day reactivation sequence. Built on Meta's free WhatsApp API — no monthly SMS charges.</div>
+      <div class="bp-result">
+        <strong>Result:</strong> You stop losing leads to silence. Every enquiry gets a professional 30-day follow-up — without you lifting a finger. Recovering just 2 extra leads per month = ₹6–20 lakh recovered annually.
+      </div>
+    </div>
+
+    <div class="bpcard rv">
+      <div class="bp-num">03</div>
+      <div class="bp-icon">📱</div>
+      <div class="bp-sub">Blueprint 3</div>
+      <div class="bp-title">DhanaTrack — Your Custom Android App</div>
+      <div class="bp-desc">A custom Android app built specifically for DNS Builders + Radhika Enterprises. Works offline. Separate ledgers for both firms. Daily income and expense logging, project-wise cost tracker, pending payment alerts, cash flow dashboard, GST invoice generator. In 10 seconds every morning, you know exactly where every rupee stands — across both companies.</div>
+      <div class="bp-result">
+        <strong>Result:</strong> Stop losing ₹50,000–₹2 lakh every month to untracked expenses, forgotten receivables, and missed GST. Your accountant will thank you. Your stress levels will drop visibly.
+      </div>
+    </div>
+
+    <div class="bpcard rv">
+      <div class="bp-num">04</div>
+      <div class="bp-icon">🎬</div>
+      <div class="bp-sub">Blueprint 4</div>
+      <div class="bp-title">AI Digital Avatar & Video Content</div>
+      <div class="bp-desc">We clone your voice and face using ElevenLabs + HeyGen AI. You record 10 minutes once. After that, AI generates unlimited professional videos — project showcases, client testimonials, festival greetings, YouTube content — all in your voice and face, automatically. You become the face of DNS Builders without standing in front of a camera every week.</div>
+      <div class="bp-result">
+        <strong>Result:</strong> A professional, consistently publishing YouTube channel and social media presence — running automatically. Your celebrity project finally gets the story it deserves.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     30-DAY ROADMAP
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">Execution Plan</div>
+  <h2 class="sh2 rv">30 Days to a <i>New Business Reality.</i></h2>
+  <p class="sp rv">Not a 6-month "digital transformation." Not a vague roadmap. This is exactly what happens, week by week, from day one.</p>
+  <div class="timeline rv">
+    <div class="tl-line"></div>
+    <div class="tl-fill" id="tlfill"></div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 1 · Days 1–7</div>
+      <div class="tl-title">🔍 Audit, Setup & Foundation</div>
+      <div class="tl-tasks">
+        <div class="tl-task">Full audit of DNS Builders + Radhika Enterprises digital gap</div>
+        <div class="tl-task">Google Business Profile created and verified for both firms</div>
+        <div class="tl-task">JustDial, IndiaMart, Sulekha listings live with real project photos</div>
+        <div class="tl-task">WhatsApp Business API connected and bot flow designed</div>
+        <div class="tl-task">DhanaTrack app design approved by Dhiraj</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 2 · Days 8–14</div>
+      <div class="tl-title">🚀 First Content Live + Bot Active</div>
+      <div class="tl-tasks">
+        <div class="tl-task">First 4 AI-generated content posts published (Instagram + WhatsApp)</div>
+        <div class="tl-task">WhatsApp lead bot goes live — all enquiries now auto-replied</div>
+        <div class="tl-task">Celebrity farmhouse project story published as featured content</div>
+        <div class="tl-task">Pimpri Residency project showcase with all 28 real photos published</div>
+        <div class="tl-task">DhanaTrack Android app delivered for testing</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 3 · Days 15–21</div>
+      <div class="tl-title">📱 App Live + Avatar Recorded</div>
+      <div class="tl-tasks">
+        <div class="tl-task">DhanaTrack app bugs fixed, final version installed on Dhiraj's phone</div>
+        <div class="tl-task">Dhiraj records 10-minute video session for AI avatar training</div>
+        <div class="tl-task">First AI-generated project video created from real footage</div>
+        <div class="tl-task">First 100 Google Business Profile impressions tracked and reported</div>
+        <div class="tl-task">SEO-optimised project pages live on website</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 4 · Days 22–30</div>
+      <div class="tl-title">📊 Full System Live + First Results</div>
+      <div class="tl-tasks">
+        <div class="tl-task">All 4 blueprints running simultaneously</div>
+        <div class="tl-task">First report: calls received, leads captured, impressions generated</div>
+        <div class="tl-task">DhanaTrack showing first month's financial clarity for both firms</div>
+        <div class="tl-task">YouTube channel created with first 2 AI avatar videos</div>
+        <div class="tl-task">Month 2 content calendar delivered to Dhiraj</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VISION BOARD — DHIRAJ'S FUTURE
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">Vision Board</div>
+  <h2 class="sh2 rv">Dhiraj, This Is Your <i>Business in March 2027.</i></h2>
+  <p class="sp rv">Not a promise. Not hype. A realistic, month-by-month picture of what happens when all 4 systems run together for 12 months. Based on PCMC market data and typical results from similar contractors who went digital.</p>
+
+  <div class="vb-wrapper rv">
+    <div class="vb-top">
+      <div>
+        <div class="vb-top-title">📅 DNS Builders & Radhika Enterprises — 12-Month Digital Transformation</div>
+        <div class="vb-top-sub">March 2026 → March 2027 · Realistic Outcomes · Based on PCMC Market Data</div>
+      </div>
+      <div style="font-size:.6rem;color:rgba(0,0,0,.5);font-style:italic;">Conservative estimates only</div>
+    </div>
+
+    <div class="vb-months">
+
+      <div class="vb-month">
+        <div class="vbm-period">Month 1–2 · Apr–May 2026</div>
+        <div class="vbm-title">🌱 Foundations Built</div>
+        <div class="vbm-items">
+          <div class="vbm-item">DNS Builders <span class="vbm-highlight">appears on Google</span> for the first time</div>
+          <div class="vbm-item">Google Business Profile: <span class="vbm-highlight">500–1,000 views/month</span></div>
+          <div class="vbm-item">WhatsApp bot handles all enquiries — <span class="vbm-highlight">0 leads drop</span></div>
+          <div class="vbm-item">DhanaTrack shows first month: you find <span class="vbm-highlight">₹40–70K in forgotten receivables</span></div>
+          <div class="vbm-item">Celebrity farmhouse story published — <span class="vbm-highlight">trust signal live</span></div>
+        </div>
+        <div class="vbm-num">₹0<span class="vbm-numl" style="font-size:.7rem"> new leads yet</span></div>
+        <div class="vbm-numl">System building phase — patience required</div>
+      </div>
+
+      <div class="vb-month">
+        <div class="vbm-period">Month 3–4 · Jun–Jul 2026</div>
+        <div class="vbm-title">📈 First Digital Leads Arrive</div>
+        <div class="vbm-items">
+          <div class="vbm-item">First 2–4 enquiries <span class="vbm-highlight">directly from Google</span></div>
+          <div class="vbm-item">Bot recovers <span class="vbm-highlight">1–2 old leads</span> from 60-day reactivation</div>
+          <div class="vbm-item">JustDial listing: <span class="vbm-highlight">3–5 additional calls/month</span></div>
+          <div class="vbm-item">DhanaTrack: Dhiraj sees both firms' P&amp;L <span class="vbm-highlight">in one screen</span></div>
+          <div class="vbm-item">First AI video gets <span class="vbm-highlight">500+ organic views</span></div>
+        </div>
+        <div class="vbm-num" data-count="1" data-sfx="-2">0</div>
+        <div class="vbm-numl">New projects from digital leads (estimated)</div>
+      </div>
+
+      <div class="vb-month">
+        <div class="vbm-period">Month 5–6 · Aug–Sep 2026</div>
+        <div class="vbm-title">🔥 System Gaining Momentum</div>
+        <div class="vbm-items">
+          <div class="vbm-item">Google ranking for <span class="vbm-highlight">"contractor Hinjewadi"</span> — page 1</div>
+          <div class="vbm-item">5–8 qualified enquiries per month from digital</div>
+          <div class="vbm-item"><span class="vbm-highlight">Radhika Enterprises</span> gets first direct electrical enquiries</div>
+          <div class="vbm-item">Monthly cash leak reduced by <span class="vbm-highlight">₹60–80K</span> (DhanaTrack effect)</div>
+          <div class="vbm-item">YouTube: <span class="vbm-highlight">200+ subscribers</span> organically</div>
+        </div>
+        <div class="vbm-num" data-count="5" data-sfx="–8">0</div>
+        <div class="vbm-numl">Qualified digital enquiries per month</div>
+      </div>
+
+      <div class="vb-month" style="border-color:rgba(201,168,76,.2);background:rgba(201,168,76,.03);">
+        <div class="vbm-period">Month 7–9 · Oct–Dec 2026</div>
+        <div class="vbm-title">💰 Revenue Impact Visible</div>
+        <div class="vbm-items">
+          <div class="vbm-item"><span class="vbm-highlight">1–2 new residential projects/month</span> directly from digital</div>
+          <div class="vbm-item">Google Business: <span class="vbm-highlight">5+ verified reviews</span> building trust</div>
+          <div class="vbm-item">AI avatar: consistent <span class="vbm-highlight">video content without effort</span></div>
+          <div class="vbm-item">Both firms fully trackable — <span class="vbm-highlight">GST invoicing automated</span></div>
+          <div class="vbm-item">Competitors start noticing DNS Builders online presence</div>
+        </div>
+        <div class="vbm-num" style="color:var(--g);" data-count="3" data-sfx="–8L">₹</div>
+        <div class="vbm-numl">Estimated extra profit/month from digital leads</div>
+      </div>
+
+      <div class="vb-month" style="border-color:rgba(201,168,76,.2);background:rgba(201,168,76,.03);">
+        <div class="vbm-period">Month 10–12 · Jan–Mar 2027</div>
+        <div class="vbm-title">🏆 DNS Builders = PCMC's Most Visible Quality Builder</div>
+        <div class="vbm-items">
+          <div class="vbm-item">DNS Builders ranks for <span class="vbm-highlight">5+ PCMC search terms</span></div>
+          <div class="vbm-item">WhatsApp bot running <span class="vbm-highlight">completely hands-free</span></div>
+          <div class="vbm-item">DhanaTrack: full year P&amp;L report — <span class="vbm-highlight">both firms</span></div>
+          <div class="vbm-item">Latur project marketed online — <span class="vbm-highlight">investors/buyers find you</span></div>
+          <div class="vbm-item">Premium clients approach <span class="vbm-highlight">you</span> — not the other way around</div>
+        </div>
+        <div class="vbm-num" style="color:var(--g);" data-count="50" data-sfx="L–1Cr">₹</div>
+        <div class="vbm-numl">Year 1 estimated additional revenue uplift (conservative)</div>
+      </div>
+
+      <div class="vb-month">
+        <div class="vbm-period">Ongoing · Month 12+</div>
+        <div class="vbm-title">🚀 Compounding Growth</div>
+        <div class="vbm-items">
+          <div class="vbm-item">Every month of content = <span class="vbm-highlight">stronger search ranking</span></div>
+          <div class="vbm-item">Every video = <span class="vbm-highlight">more trust, more leads</span></div>
+          <div class="vbm-item">Every review = <span class="vbm-highlight">next client already half-convinced</span></div>
+          <div class="vbm-item">Dhiraj focuses on <span class="vbm-highlight">quality work</span> — systems handle the rest</div>
+          <div class="vbm-item">Radhika Enterprises becomes a <span class="vbm-highlight">standalone brand</span> too</div>
+        </div>
+        <div class="vbm-num" style="color:var(--grn);">∞</div>
+        <div class="vbm-numl">The system keeps working after you stop</div>
+      </div>
+
+    </div>
+
+    <div class="vb-year-end">
+      <div class="vby-title">📊 March 2027 — Where DNS Builders Could Stand</div>
+      <div class="vby-stats">
+        <div class="vby-s"><div class="vby-n" data-count="12" data-sfx="+">0</div><div class="vby-l">Digital Leads / Month</div></div>
+        <div class="vby-s"><div class="vby-n">₹50L–1Cr</div><div class="vby-l">Est. Extra Revenue / Year</div></div>
+        <div class="vby-s"><div class="vby-n" data-count="2" data-sfx="L+">₹</div><div class="vby-l">Monthly Savings (DhanaTrack)</div></div>
+        <div class="vby-s"><div class="vby-n">17x–35x</div><div class="vby-l">Estimated ROI on Investment</div></div>
+      </div>
+    </div>
+    <div class="vb-disclaimer">These are realistic estimates based on PCMC market data and similar contractor digitisation results. Actual outcomes depend on market conditions, project availability, and execution quality. ads4you commits to maximum effort — results require time and consistency. No outcome is guaranteed.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WHY ads4you
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">Why Trust ads4you</div>
+  <h2 class="sh2 rv">New Business. <i>Real Skills. Honest Work.</i></h2>
+  <p class="sp rv">Prashant Handge is not a large agency with 50 employees and high overhead. He is a skilled AI technologist from Wakad, Pune — working directly on your account, no junior staff, no outsourcing. Here is why that is better for you.</p>
+  <div class="trust-grid">
+    <div class="tcred rv">
+      <div class="tcred-i">🏛️</div>
+      <div class="tcred-t">UDYAM Registered</div>
+      <div class="tcred-d">UDYAM-MH-26-1092780 — Government-verified micro enterprise. Not a freelancer on WhatsApp. A registered Pune business.</div>
+    </div>
+    <div class="tcred rv">
+      <div class="tcred-i">🏢</div>
+      <div class="tcred-t">GeM + NSIC + Skill India</div>
+      <div class="tcred-d">Registered on Government e-Marketplace, NSIC B2B portal, and Skill India. Verified credentials, real registrations.</div>
+    </div>
+    <div class="tcred rv">
+      <div class="tcred-i">🤝</div>
+      <div class="tcred-t">Local Pune Partner</div>
+      <div class="tcred-d">Based in Wakad. Same city. You can meet Prashant in person. No remote agency from Mumbai or Bangalore billing travel costs.</div>
+    </div>
+    <div class="tcred rv">
+      <div class="tcred-i">🛠️</div>
+      <div class="tcred-t">Direct Execution</div>
+      <div class="tcred-d">Prashant personally builds every system — WhatsApp bot, Android app, content, website. You talk to the person doing the work.</div>
+    </div>
+    <div class="tcred rv">
+      <div class="tcred-i">💡</div>
+      <div class="tcred-t">AI + Tech Expertise</div>
+      <div class="tcred-d">Python automation, n8n workflows, Claude AI integration, Android development, video AI tools — rare combination in one local person.</div>
+    </div>
+    <div class="tcred rv">
+      <div class="tcred-i">🛡️</div>
+      <div class="tcred-t">No Lock-In Contracts</div>
+      <div class="tcred-d">Month-to-month after setup. If results are not showing by month 3, you can pause. Fair terms. No 12-month traps.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRICING — TRANSPARENT, HONEST
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="slb rv">Investment</div>
+  <h2 class="sh2 rv">Clear Pricing. <i>No Surprises.</i></h2>
+  <p class="sp rv">Three honest options based on what Dhiraj needs now vs what can wait. All prices are final — no hidden charges, no "plus GST surprises" mid-project.</p>
+
+  <div class="price-grid">
+
+    <div class="pricebox rv">
+      <div class="price-tier">Starter</div>
+      <div class="price-name">Digital Foundation</div>
+      <div class="price-desc">Get visible online. Get a follow-up bot. Start capturing leads that are currently going to competitors.</div>
+      <div class="price-amount">₹<span>25,000</span></div>
+      <div class="price-per">One-time setup + ₹6,000/month maintenance</div>
+      <div class="price-items">
+        <div class="pi"><span class="pi-check">✓</span>Google Business Profile setup & verification</div>
+        <div class="pi"><span class="pi-check">✓</span>JustDial + IndiaMart + Sulekha listings</div>
+        <div class="pi"><span class="pi-check">✓</span>WhatsApp AI Lead Bot (30-day follow-up)</div>
+        <div class="pi"><span class="pi-check">✓</span>8 AI content posts/month (Instagram + WhatsApp)</div>
+        <div class="pi"><span class="pi-check">✓</span>Basic project portfolio page on website</div>
+        <div class="pi"><span class="pi-x">✗</span>DhanaTrack Android app</div>
+        <div class="pi"><span class="pi-x">✗</span>AI Digital Avatar</div>
+      </div>
+      <a class="price-cta" href="https://wa.me/919767066941?text=Hi Prashant, I am interested in the Starter plan for DNS Builders">Start with Foundation</a>
+    </div>
+
+    <div class="pricebox featured rv">
+      <div class="price-tier">Most Popular</div>
+      <div class="price-name">Full Digital System</div>
+      <div class="price-desc">Everything in Starter plus the DhanaTrack app that stops cash from leaking. The complete system Dhiraj needs running now.</div>
+      <div class="price-amount">₹<span>45,000</span></div>
+      <div class="price-per">One-time setup + ₹9,000/month maintenance</div>
+      <div class="price-items">
+        <div class="pi"><span class="pi-check">✓</span>Everything in Starter plan</div>
+        <div class="pi"><span class="pi-check">✓</span>DhanaTrack Android app (dual-firm ledgers)</div>
+        <div class="pi"><span class="pi-check">✓</span>GST invoice generator in app</div>
+        <div class="pi"><span class="pi-check">✓</span>12 AI content posts/month</div>
+        <div class="pi"><span class="pi-check">✓</span>Competitor tracking monthly report</div>
+        <div class="pi"><span class="pi-check">✓</span>WhatsApp bot: 60-day reactivation sequence</div>
+        <div class="pi"><span class="pi-x">✗</span>AI Digital Avatar (can add later)</div>
+      </div>
+      <a class="price-cta" href="https://wa.me/919767066941?text=Hi Prashant, I am interested in the Full Digital System for DNS Builders">Choose This Plan</a>
+    </div>
+
+    <div class="pricebox rv">
+      <div class="price-tier">Complete</div>
+      <div class="price-name">AI-Powered Business</div>
+      <div class="price-desc">All 4 blueprints. The complete transformation. DNS Builders becomes PCMC's most digitally advanced contractor. For Dhiraj's long-term vision.</div>
+      <div class="price-amount">₹<span>70,000</span></div>
+      <div class="price-per">One-time setup + ₹14,000/month maintenance</div>
+      <div class="price-items">
+        <div class="pi"><span class="pi-check">✓</span>Everything in Full Digital System</div>
+        <div class="pi"><span class="pi-check">✓</span>AI Digital Avatar (ElevenLabs + HeyGen)</div>
+        <div class="pi"><span class="pi-check">✓</span>16 AI content posts/month + video reels</div>
+        <div class="pi"><span class="pi-check">✓</span>YouTube channel setup + 2 videos/month</div>
+        <div class="pi"><span class="pi-check">✓</span>Latur project pre-marketing campaign</div>
+        <div class="pi"><span class="pi-check">✓</span>Quarterly strategy calls with Prashant</div>
+      </div>
+      <a class="price-cta" href="https://wa.me/919767066941?text=Hi Prashant, I want to discuss the Complete AI Business plan for DNS Builders">Discuss Complete Plan</a>
+    </div>
+
+  </div>
+
+  <div class="price-note rv">
+    <strong style="color:var(--g);">Honest Note from Prashant:</strong> If you are unsure — start with the Foundation plan (₹25,000 setup). See real results in 60 days. If you like what you see, we expand. No pressure to commit to the full system upfront. The goal is to earn your trust with results, not contracts.<br><br>
+    All prices include GST. Payment: 50% advance, 50% on delivery. Monthly maintenance is billed monthly, cancel with 30 days notice.
+  </div>
+</div>
+
+
+<!-- ══ YEARLY BUDGET TABLE ══ -->
+<div class="hdiv" style="margin-top:32px;"></div>
+<div class="S" style="padding-top:60px;">
+  <div class="slb rv">Annual Investment</div>
+  <h2 class="sh2 rv">What You Pay. <i>What You Get. Year by Year.</i></h2>
+  <p class="sp rv">Full transparency — every rupee accounted for. No surprises in Month 6.</p>
+
+  <div style="overflow-x:auto;">
+  <table style="width:100%;border-collapse:collapse;font-size:.75rem;" class="rv">
+    <thead>
+      <tr style="background:rgba(201,168,76,.08);">
+        <th style="padding:14px 16px;text-align:left;font-family:var(--D);font-size:.52rem;letter-spacing:2px;color:var(--g);text-transform:uppercase;border-bottom:1px solid var(--bdr);">Component</th>
+        <th style="padding:14px 16px;text-align:right;font-family:var(--D);font-size:.52rem;letter-spacing:2px;color:var(--g);text-transform:uppercase;border-bottom:1px solid var(--bdr);">Starter</th>
+        <th style="padding:14px 16px;text-align:right;font-family:var(--D);font-size:.52rem;letter-spacing:2px;color:var(--ora);text-transform:uppercase;border-bottom:1px solid var(--bdr);">Full Digital ⭐</th>
+        <th style="padding:14px 16px;text-align:right;font-family:var(--D);font-size:.52rem;letter-spacing:2px;color:var(--g);text-transform:uppercase;border-bottom:1px solid var(--bdr);">Complete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:rgba(255,255,255,.02);">
+        <td style="padding:13px 16px;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">One-time setup</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);border-bottom:1px solid rgba(255,255,255,.04);">₹25,000</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);font-weight:700;border-bottom:1px solid rgba(255,255,255,.04);">₹45,000</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);border-bottom:1px solid rgba(255,255,255,.04);">₹70,000</td>
+      </tr>
+      <tr>
+        <td style="padding:13px 16px;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">Monthly retainer</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);border-bottom:1px solid rgba(255,255,255,.04);">₹6,000/mo</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);font-weight:700;border-bottom:1px solid rgba(255,255,255,.04);">₹9,000/mo</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--w);border-bottom:1px solid rgba(255,255,255,.04);">₹14,000/mo</td>
+      </tr>
+      <tr style="background:rgba(255,255,255,.02);">
+        <td style="padding:13px 16px;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">12 months retainer</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">₹72,000</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">₹1,08,000</td>
+        <td style="padding:13px 16px;text-align:right;color:var(--mu);border-bottom:1px solid rgba(255,255,255,.04);">₹1,68,000</td>
+      </tr>
+      <tr style="background:rgba(201,168,76,.07);border-top:1px solid rgba(201,168,76,.25);">
+        <td style="padding:16px 16px;font-family:var(--D);font-size:.78rem;color:var(--g);font-weight:700;">Year 1 Total</td>
+        <td style="padding:16px 16px;text-align:right;font-family:var(--D);font-size:.88rem;color:var(--w);font-weight:700;">₹97,000</td>
+        <td style="padding:16px 16px;text-align:right;font-family:var(--D);font-size:.95rem;color:var(--g);font-weight:700;">₹1,53,000</td>
+        <td style="padding:16px 16px;text-align:right;font-family:var(--D);font-size:.88rem;color:var(--w);font-weight:700;">₹2,38,000</td>
+      </tr>
+      <tr style="background:rgba(0,200,150,.04);border-top:1px solid rgba(0,200,150,.15);">
+        <td style="padding:13px 16px;color:rgba(0,200,150,.8);font-size:.7rem;">Year 2+ (setup removed, retainer only)</td>
+        <td style="padding:13px 16px;text-align:right;color:rgba(0,200,150,.8);">₹72,000/yr</td>
+        <td style="padding:13px 16px;text-align:right;color:rgba(0,200,150,.8);font-weight:700;">₹1,08,000/yr</td>
+        <td style="padding:13px 16px;text-align:right;color:rgba(0,200,150,.8);">₹1,68,000/yr</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="margin-top:16px;padding:14px 18px;background:rgba(201,168,76,.05);border:1px solid var(--bdr);font-size:.68rem;color:var(--mu);line-height:1.7;" class="rv">
+    <strong style="color:var(--g);">Payment terms:</strong> 50% advance to begin setup · 50% on delivery · Monthly billing on 1st · Cancel with 30 days notice · No lock-in · All prices include GST
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FINAL CTA
+══════════════════════════════════════ -->
+<div class="hdiv"></div>
+<div class="S">
+  <div class="ctabox rvs">
+    <div class="cta-glow"></div>
+    <h2 class="cta-h">Dhiraj,<br><span style="color:var(--g);">Your Business</span><br>Deserves This.</h2>
+    <p class="cta-p">10 saal ki mehnat ko duniya tak pahunchao. You've built real things. Now let's make sure the right people find you. One conversation is all it takes to start.</p>
+    <div class="cta-btns">
+      <a class="cta-wa" href="https://wa.me/919767066941?text=Dhiraj here. I reviewed your proposal. Let's talk." id="ctaWa">
+        💬 WhatsApp Prashant Now
+      </a>
+      <a class="cta-call" href="tel:+919767066941">
+        📞 Call: 9767066941
+      </a>
+    </div>
+    <div class="cta-ref">Proposal AFY-DNS-2026-001 · Valid 30 Days · ads4you AI Automation Studio · Wakad, Pune · UDYAM-MH-26-1092780</div>
+  </div>
+</div>
+
+<footer>
+  <p>ads4you AI Automation Studio · Prashant Handge · Wakad, Pune<br>
+  UDYAM-MH-26-1092780 · GeM Registered · NSIC B2B · Skill India<br>
+  <a href="https://hshant966.github.io/ads4you">hshant966.github.io/ads4you</a> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90f1f4e3a4e9ffe5d0eafff8fffdf1f9fcbef3fffd">[email&#160;protected]</a> · 9767066941</p>
+  <p style="margin-top:8px;font-size:.5rem;color:rgba(74,98,128,.35);">Prepared exclusively for Dhiraj N. Sarwade — DNS Builders & Developers + Radhika Enterprises · Confidential</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── LOADER
+let p=0;
+const lf=document.getElementById('lfill'),lp=document.getElementById('lpct');
+const li=setInterval(()=>{
+  p+=Math.random()*3+1;
+  if(p>=100){p=100;clearInterval(li);
+    setTimeout(()=>{
+      const ldr=document.getElementById('ldr');
+      gsap.to(ldr,{opacity:0,duration:.5,ease:'power2.in',onComplete:()=>{ldr.style.display='none';initAll();}});
+    },300);
+  }
+  lf.style.width=p+'%'; lp.textContent=Math.floor(p);
+},36);
+
+function initAll(){
+  gsap.registerPlugin(ScrollTrigger);
+
+  // HERO WORDS
+  gsap.to('.hw',{y:0,duration:1,stagger:.08,ease:'power4.out',delay:.1});
+  gsap.to('#hfrom',{opacity:1,duration:.7,delay:.8});
+  gsap.to('#hto',{opacity:1,duration:.7,delay:1});
+  gsap.to('#hdesc',{opacity:1,duration:.8,delay:1.2});
+  gsap.to('#hbtns',{opacity:1,duration:.8,delay:1.4});
+  gsap.to('#hmeta',{opacity:1,duration:.8,delay:1.6});
+
+  // SCROLL REVEALS
+  document.querySelectorAll('.rv').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,y:30},{opacity:1,y:0,duration:.7,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%'}});
+  });
+  document.querySelectorAll('.rvl').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,x:-36},{opacity:1,x:0,duration:.8,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 86%'}});
+  });
+  document.querySelectorAll('.rvr').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,x:36},{opacity:1,x:0,duration:.8,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 86%'}});
+  });
+  document.querySelectorAll('.rvs').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,scale:.93},{opacity:1,scale:1,duration:.8,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 86%'}});
+  });
+
+  // COUNTERS
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const t=parseInt(el.dataset.count), sfx=el.dataset.sfx||'';
+    const prefix=el.textContent.startsWith('₹')?'₹':'';
+    ScrollTrigger.create({trigger:el,start:'top 82%',onEnter:()=>{
+      gsap.fromTo({v:0},{v:t},{duration:2,ease:'power2.out',
+        onUpdate:function(){el.textContent=prefix+Math.floor(this.targets()[0].v)+sfx;}});
+    }});
+  });
+
+  // SCROLL PROGRESS
+  window.addEventListener('scroll',()=>{
+    const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+    document.getElementById('sprog').style.height=pct+'%';
+  });
+
+  // TIMELINE FILL ON SCROLL
+  const tlf=document.getElementById('tlfill');
+  if(tlf){
+    ScrollTrigger.create({
+      trigger:'.timeline',start:'top 80%',end:'bottom 30%',scrub:.5,
+      onUpdate:self=>{tlf.style.height=(self.progress*100)+'%';}
+    });
+  }
+
+  // TICKER SPEED ON SCROLL
+  let ls=0;
+  window.addEventListener('scroll',()=>{
+    const spd=Math.abs(window.scrollY-ls)*.5;
+    const tk=document.getElementById('tkt');
+    if(tk)tk.style.animationDuration=Math.max(8,20-spd)+'s';
+    ls=window.scrollY;
+  });
+
+  // NAV
+  window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('s',scrollY>60));
+}
+
+// ── CURSOR (desktop)
+const c1=document.getElementById('cur'),c2=document.getElementById('cur2');
+if(c1){
+  let mx=0,my=0,tx=0,ty=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c1.style.left=mx+'px';c1.style.top=my+'px';});
+  (function a(){tx+=(mx-tx)*.12;ty+=(my-ty)*.12;c2.style.left=tx+'px';c2.style.top=ty+'px';requestAnimationFrame(a);})();
+}
+
+// ── EMOJI BURST ON CTA HOVER
+const waBtn=document.getElementById('ctaWa');
+if(waBtn){
+  waBtn.addEventListener('mouseover',function(){
+    const emojis=['🚀','💰','📱','✅','🎯','⚡','🏗️','💡'];
+    for(let i=0;i<8;i++){
+      const e=document.createElement('div');
+      e.className='emoji-burst';
+      e.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      e.style.cssText=`left:${waBtn.getBoundingClientRect().left+Math.random()*waBtn.offsetWidth}px;top:${waBtn.getBoundingClientRect().top+window.scrollY}px;position:absolute;pointer-events:none;z-index:9000;font-size:1.3rem;`;
+      e.style.setProperty('--ex',(Math.random()-0.5)*120+'px');
+      e.style.setProperty('--ey',-(Math.random()*80+20)+'px');
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),900);
+    }
+  });
+}
+</script>
+
+<div id="ldr-bottom"></div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  var lf = document.getElementById('lfill');
+  var lp = document.getElementById('lpct');
+  var ldr = document.getElementById('ldr');
+  
+  if (!lf || !lp || !ldr) return;
+  
+  var p = 0;
+  var li = setInterval(function() {
+    p += Math.random() * 3 + 1;
+    if (p >= 100) {
+      p = 100;
+      clearInterval(li);
+      setTimeout(function() {
+        ldr.style.opacity = '0';
+        ldr.style.transition

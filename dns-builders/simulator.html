@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS Builders — Business Simulator | ads4you</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0B0F1A;color:#F0EDE8;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:linear-gradient(#C9A84C,#E8651A);border-radius:2px}
+
+/* ── BACKGROUND ── */
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:36px 36px;pointer-events:none;z-index:0}
+.glow1{position:fixed;top:-20%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(201,168,76,.12) 0%,transparent 65%);pointer-events:none;z-index:0;animation:driftA 12s ease-in-out infinite alternate}
+.glow2{position:fixed;bottom:-20%;right:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(0,180,150,.1) 0%,transparent 65%);pointer-events:none;z-index:0;animation:driftB 14s ease-in-out infinite alternate}
+.glow3{position:fixed;top:30%;left:40%;width:40%;height:40%;background:radial-gradient(ellipse,rgba(232,101,26,.07) 0%,transparent 65%);pointer-events:none;z-index:0;animation:driftC 10s ease-in-out infinite alternate}
+@keyframes driftA{from{transform:translate(0,0)}to{transform:translate(4%,3%)}}
+@keyframes driftB{from{transform:translate(0,0)}to{transform:translate(-3%,-4%)}}
+@keyframes driftC{from{transform:translate(0,0)}to{transform:translate(2%,-3%)}}
+
+/* ── GUIDE OVERLAY ── */
+#guideOverlay{position:fixed;inset:0;background:rgba(5,8,18,.97);backdrop-filter:blur(20px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.guide-box{max-width:680px;width:100%;padding:0 0 40px}
+.guide-logo{text-align:center;margin-bottom:32px}
+.guide-logo-badge{display:inline-block;background:linear-gradient(135deg,#C9A84C,#E8651A);color:#0B0F1A;font-size:.5rem;font-weight:900;letter-spacing:4px;text-transform:uppercase;padding:6px 20px;margin-bottom:14px}
+.guide-logo-title{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;letter-spacing:-.5px;line-height:1.1;color:#F0EDE8}
+.guide-logo-title span{background:linear-gradient(135deg,#C9A84C,#E8651A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.guide-logo-sub{font-size:.72rem;color:#5A7090;margin-top:8px}
+
+.guide-section{margin-bottom:28px}
+.guide-section-title{font-size:.46rem;color:#C9A84C;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.guide-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.3),transparent)}
+
+.guide-steps{display:flex;flex-direction:column;gap:8px}
+.guide-step{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-left:3px solid #C9A84C}
+.step-num{width:28px;height:28px;min-width:28px;background:linear-gradient(135deg,#C9A84C,#E8651A);color:#0B0F1A;font-size:.65rem;font-weight:900;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.step-body{}
+.step-title{font-size:.72rem;font-weight:700;color:#F0EDE8;margin-bottom:3px}
+.step-desc{font-size:.64rem;color:#5A7090;line-height:1.55}
+
+.guide-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.guide-card{padding:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);text-align:center}
+.guide-card-icon{font-size:1.6rem;margin-bottom:6px}
+.guide-card-title{font-size:.65rem;font-weight:700;color:#F0EDE8;margin-bottom:4px}
+.guide-card-desc{font-size:.58rem;color:#5A7090;line-height:1.5}
+
+.guide-tip{background:rgba(0,200,150,.06);border:1px solid rgba(0,200,150,.2);border-left:3px solid #00C896;padding:12px 16px;margin-top:12px}
+.guide-tip-label{font-size:.46rem;color:#00C896;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.guide-tip-text{font-size:.64rem;color:#5A7090;line-height:1.55}
+
+.guide-start-btn{width:100%;background:linear-gradient(135deg,#C9A84C,#E8651A);border:none;color:#0B0F1A;padding:18px;font-size:.8rem;font-weight:900;cursor:pointer;letter-spacing:3px;text-transform:uppercase;margin-top:28px;box-shadow:0 8px 40px rgba(201,168,76,.35);transition:all .2s}
+.guide-start-btn:hover{transform:translateY(-1px);box-shadow:0 12px 50px rgba(201,168,76,.45)}
+.guide-start-label{font-size:.5rem;color:rgba(11,15,26,.6);letter-spacing:2px;margin-top:4px;font-weight:600}
+
+/* ── HEADER ── */
+.header{background:linear-gradient(135deg,rgba(15,25,50,.97),rgba(10,18,35,.97));backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,.2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(0,0,0,.4)}
+.header-label{font-size:.44rem;background:linear-gradient(90deg,#C9A84C,#E8651A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px;font-weight:700}
+.header-title{font-size:1.05rem;font-weight:900;letter-spacing:-.4px;color:#F0EDE8}
+.header-sub{font-size:.55rem;color:#4A6280;margin-top:1px}
+.header-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(232,101,26,.1));border:1px solid rgba(201,168,76,.3);padding:6px 12px;font-size:.54rem;color:#C9A84C;font-weight:700}
+.badge-gray{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:6px 12px;font-size:.54rem;color:#4A6280}
+.btn-reset{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);color:#FF6B6B;padding:6px 14px;font-size:.54rem;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.btn-reset:hover{background:rgba(255,80,80,.18);border-color:rgba(255,80,80,.5)}
+.btn-guide{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(232,101,26,.12));border:1px solid rgba(201,168,76,.3);color:#C9A84C;padding:6px 14px;font-size:.54rem;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all .2s}
+.btn-guide:hover{background:linear-gradient(135deg,rgba(201,168,76,.25),rgba(232,101,26,.2))}
+
+/* ── CONTENT ── */
+.wrap{position:relative;z-index:1}
+.content{padding:16px 16px 100px;max-width:980px;margin:0 auto}
+
+/* ── WIN PANEL ── */
+.win-panel{background:linear-gradient(135deg,rgba(0,200,150,.12),rgba(201,168,76,.1),rgba(232,101,26,.08));border:1px solid rgba(0,200,150,.4);padding:30px 24px;margin-bottom:16px;text-align:center;animation:wonPulse 2.5s ease-in-out infinite;display:none;position:relative;overflow:hidden}
+.win-panel::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,200,150,.04),transparent 50%,rgba(201,168,76,.04));pointer-events:none}
+.win-emoji{font-size:3rem;margin-bottom:10px;animation:bounce .8s ease infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.win-title{font-size:clamp(1rem,3vw,1.4rem);font-weight:900;background:linear-gradient(135deg,#00C896,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.3px;margin-bottom:10px}
+.win-desc{font-size:.7rem;color:rgba(240,237,232,.6);margin-bottom:22px;line-height:1.85;max-width:520px;margin-left:auto;margin-right:auto}
+.win-cta{display:inline-block;background:linear-gradient(135deg,#C9A84C,#E8651A);color:#0B0F1A;padding:18px 40px;font-size:.72rem;font-weight:900;letter-spacing:2px;text-decoration:none;text-transform:uppercase;box-shadow:0 6px 30px rgba(201,168,76,.4);transition:all .2s}
+.win-cta:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(201,168,76,.5)}
+
+/* ── TOP GRID ── */
+.top-grid{display:grid;grid-template-columns:160px 1fr;gap:12px;margin-bottom:12px}
+.gauge-card{background:linear-gradient(135deg,rgba(15,25,50,.9),rgba(10,18,38,.9));padding:16px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border .5s;border:1px solid rgba(255,59,59,.2);box-shadow:inset 0 0 30px rgba(0,0,0,.3)}
+.gauge-status{font-size:.5rem;font-weight:800;letter-spacing:2px;margin-top:8px;transition:color .5s}
+
+.right-col{display:flex;flex-direction:column;gap:10px}
+.rev-card{background:linear-gradient(135deg,rgba(0,200,150,.08),rgba(0,150,120,.05));border:1px solid rgba(0,200,150,.25);padding:18px 20px;flex:1;position:relative;overflow:hidden;box-shadow:inset 0 0 40px rgba(0,200,150,.03)}
+.rev-card::before{content:'';position:absolute;top:-50%;right:-10%;width:200px;height:200px;background:radial-gradient(ellipse,rgba(0,200,150,.08),transparent 70%);pointer-events:none}
+.rev-label{font-size:.44rem;color:rgba(0,200,150,.7);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+.rev-value{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;background:linear-gradient(135deg,#00C896,#00E5B0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1.5px;line-height:1;transition:all .1s}
+.rev-sub{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+.rev-growth{font-size:.6rem;color:#4A6280}
+.rev-roi{font-size:.6rem;color:#C9A84C;font-weight:700}
+
+.stat-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat-pill{padding:10px 8px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.pill-shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:shine 3s ease-in-out infinite}
+@keyframes shine{0%{left:-100%}100%{left:200%}}
+.pill-icon{font-size:1.1rem;margin-bottom:3px}
+.pill-value{font-size:.95rem;font-weight:900;letter-spacing:-.5px;line-height:1;transition:all .3s}
+.pill-label{font-size:.44rem;color:rgba(240,237,232,.3);margin-top:3px;text-transform:uppercase;letter-spacing:1px}
+
+/* ── TIMELINE ── */
+.timeline-card{background:linear-gradient(135deg,rgba(15,25,50,.9),rgba(10,20,40,.9));border:1px solid rgba(201,168,76,.15);padding:14px 16px;margin-bottom:12px;display:none}
+.tl-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.tl-label{font-size:.44rem;color:#4A6280;text-transform:uppercase;letter-spacing:2px}
+.tl-count{font-size:.6rem;color:#C9A84C;font-weight:700}
+.tl-bar{height:5px;background:rgba(255,255,255,.05);margin-bottom:10px;border-radius:3px;overflow:hidden}
+.tl-fill{height:100%;width:0%;background:linear-gradient(90deg,#C9A84C,#E8651A,#00C896);transition:width .8s ease;box-shadow:0 0 12px rgba(0,200,150,.5)}
+.months-row{display:flex;gap:2px}
+.month-cell{flex:1;height:22px;display:flex;align-items:center;justify-content:center;font-size:.38rem;font-weight:400;transition:all .3s;border:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.02);color:rgba(255,255,255,.2);border-radius:2px}
+
+/* ── CARDS ── */
+.panel{background:linear-gradient(135deg,rgba(15,25,50,.85),rgba(10,18,35,.85));border:1px solid rgba(255,255,255,.07);padding:16px 18px;margin-bottom:12px;backdrop-filter:blur(8px)}
+.section-label{font-size:.44rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.25),transparent)}
+
+/* ── BARS ── */
+.bars-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 32px}
+.bar-row{margin-bottom:14px}
+.bar-header{display:flex;justify-content:space-between;margin-bottom:5px}
+.bar-name{font-size:.56rem;color:rgba(240,237,232,.4);letter-spacing:1.5px;text-transform:uppercase}
+.bar-val{font-size:.62rem;font-weight:700}
+.bar-track{height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1);width:0%}
+
+/* ── FUNNEL ── */
+.funnel-row{display:flex;gap:6px;align-items:stretch}
+.funnel-stage{flex:1;display:flex;flex-direction:column;gap:6px;align-items:center}
+.funnel-box{width:100%;height:56px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:2px}
+.funnel-fill{position:absolute;left:0;bottom:0;height:100%;transition:width 1s ease}
+.funnel-val{font-size:1.1rem;font-weight:900;position:relative;z-index:1;transition:all .5s}
+.funnel-label{font-size:.44rem;color:rgba(240,237,232,.35);text-transform:uppercase;letter-spacing:1px;text-align:center}
+.funnel-arrow{font-size:.8rem;color:rgba(255,255,255,.15);position:absolute;right:-10px;top:50%;transform:translateY(-50%);z-index:2}
+
+/* ── SYSTEMS ── */
+.systems-label{font-size:.44rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;font-weight:700;display:flex;align-items:center;gap:8px}
+.systems-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.25),transparent)}
+.systems-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px}
+.sys-btn{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.08);padding:13px 14px;cursor:pointer;text-align:left;transition:all .2s;position:relative;overflow:hidden;width:100%;border-radius:2px}
+.sys-btn:hover:not([disabled]){background:rgba(255,255,255,.05);border-color:rgba(201,168,76,.25);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.sys-btn.active{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(232,101,26,.08));border-color:rgba(201,168,76,.4);border-left-color:#C9A84C;box-shadow:0 0 20px rgba(201,168,76,.1)}
+.sys-btn.active::after{content:'✓';position:absolute;top:6px;right:8px;font-size:.55rem;color:#C9A84C;font-weight:900}
+.sys-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sys-icon{font-size:1.2rem}
+.sys-name{font-size:.63rem;font-weight:700;color:#F0EDE8;line-height:1.2;transition:color .2s}
+.sys-btn.active .sys-name{color:#C9A84C}
+.sys-desc{font-size:.57rem;color:#4A6280;line-height:1.45;margin-bottom:8px}
+.sys-tags{display:flex;gap:4px;flex-wrap:wrap}
+.sys-tag{font-size:.42rem;background:linear-gradient(135deg,rgba(0,200,150,.1),rgba(0,180,140,.07));border:1px solid rgba(0,200,150,.2);color:#00C896;padding:2px 7px;border-radius:2px;letter-spacing:.5px}
+
+/* ── FEED ── */
+.feed-header{font-size:.44rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;font-weight:700;display:flex;align-items:center;gap:8px}
+.feed-header::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.25),transparent)}
+.live-dot{color:#00C896;animation:blink 1s infinite;margin-left:4px}
+.feed-scroll{max-height:130px;overflow-y:auto;scrollbar-width:thin}
+.feed-item{font-size:.6rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.5;transition:color .3s}
+
+/* ── RUN BUTTON ── */
+.run-btn{width:100%;background:linear-gradient(135deg,#C9A84C 0%,#E8651A 60%,#FF6B35 100%);border:none;color:#0B0F1A;padding:20px;font-size:.78rem;font-weight:900;cursor:pointer;letter-spacing:3px;text-transform:uppercase;transition:all .25s;box-shadow:0 6px 40px rgba(201,168,76,.3),0 2px 0 rgba(255,255,255,.1) inset;position:relative;overflow:hidden;border-radius:2px}
+.run-btn::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:left .5s}
+.run-btn:hover:not([disabled])::before{left:150%}
+.run-btn:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 10px 50px rgba(201,168,76,.4)}
+.run-btn:disabled{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(232,101,26,.08));border:1px solid rgba(201,168,76,.2);color:#C9A84C;cursor:not-allowed;box-shadow:none;transform:none}
+
+@keyframes wonPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,.3),0 0 60px rgba(201,168,76,.1)}50%{box-shadow:0 0 0 14px rgba(0,200,150,0),0 0 80px rgba(201,168,76,.15)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@media(max-width:620px){.top-grid{grid-template-columns:1fr}.gauge-card{display:none}.stat-pills{grid-template-columns:repeat(2,1fr)}.bars-grid{grid-template-columns:1fr}.guide-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ GUIDE OVERLAY ═══════════════ -->
+<div id="guideOverlay">
+  <div class="guide-box">
+    <div class="guide-logo">
+      <div class="guide-logo-badge">ads4you AI Studio</div>
+      <div class="guide-logo-title">Contractor Business<br><span>Simulator</span></div>
+      <div class="guide-logo-sub">DNS Builders · Dhiraj N. Sarwade · Hinjewadi, Pune</div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">👋 Welcome — What Is This?</div>
+      <p style="font-size:.68rem;color:#5A7090;line-height:1.75;margin-bottom:10px">This is a <strong style="color:#F0EDE8">live business simulator</strong> built specifically for DNS Builders. It shows you exactly what happens to your leads, revenue, and online visibility when you activate each digital system — <em>before you invest a single rupee.</em></p>
+      <p style="font-size:.68rem;color:#5A7090;line-height:1.75">Think of it like a video game where <strong style="color:#C9A84C">your business is the player</strong> — and each system you activate levels it up.</p>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">🕹️ How to Use It — 3 Steps</div>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Activate Systems</div>
+            <div class="step-desc">Scroll down and tap any of the 7 system cards — like "Google Business Profile" or "WhatsApp AI Bot". Each one you activate will instantly update your metrics. Try activating all 7 to see the full picture.</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Run the 12-Month Simulation</div>
+            <div class="step-desc">Hit the big gold button at the bottom — <strong style="color:#F0EDE8">"RUN 12-MONTH SIMULATION"</strong>. Watch your revenue counter increase, leads multiply, and business health score climb month-by-month in real time.</div>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Reach 90+ Health Score → Win Screen</div>
+            <div class="step-desc">When your business health score crosses 90, a special success screen appears. It shows your estimated ROI and has a direct button to WhatsApp Prashant and start this journey for real.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">📊 What Each Number Means</div>
+      <div class="guide-cards">
+        <div class="guide-card">
+          <div class="guide-card-icon">🌡️</div>
+          <div class="guide-card-title">Business Health Score</div>
+          <div class="guide-card-desc">Overall strength of your digital presence. 0–35 is Critical. 35–55 is Building. 55–80 is Growing. 80+ is Thriving.</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-icon">💰</div>
+          <div class="guide-card-title">Monthly Revenue</div>
+          <div class="guide-card-desc">Estimated revenue generated from digital leads per month. Starts at ₹80K baseline and grows as you activate systems.</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-icon">📍</div>
+          <div class="guide-card-title">Leads / Month</div>
+          <div class="guide-card-desc">Number of qualified project enquiries coming in digitally every month. Currently you get 2–3 only via WhatsApp manually.</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-icon">🔁</div>
+          <div class="guide-card-title">Conversion Rate</div>
+          <div class="guide-card-desc">% of leads that become actual projects. The bot, portfolio automation, and follow-ups dramatically improve this number.</div>
+        </div>
+      </div>
+      <div class="guide-tip">
+        <div class="guide-tip-label">💡 Pro Tip</div>
+        <div class="guide-tip-text">Try activating only 2–3 systems first, run the simulation, then reset and activate all 7. You'll see exactly which combinations drive the biggest impact for DNS Builders.</div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">🛠️ The 7 Systems Explained</div>
+      <div class="guide-steps">
+        <div class="guide-step" style="border-left-color:#4285F4">
+          <div class="step-num" style="background:linear-gradient(135deg,#4285F4,#34A853)">🌐</div>
+          <div class="step-body"><div class="step-title">Google Business Profile</div><div class="step-desc">Makes DNS Builders appear on Google Maps and Search when someone types "contractor Hinjewadi" or "builder PCMC". Zero cost, massive visibility boost.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#FF9500">
+          <div class="step-num" style="background:linear-gradient(135deg,#FF9500,#FF6B00)">🔍</div>
+          <div class="step-body"><div class="step-title">SEO Optimization</div><div class="step-desc">Pushes DNS Builders to rank on Page 1 for high-value keywords. People searching for contractors in PCMC find you — not competitors.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#FFD700">
+          <div class="step-num" style="background:linear-gradient(135deg,#FFD700,#FFA500)">⭐</div>
+          <div class="step-body"><div class="step-title">Customer Reviews</div><div class="step-desc">Verified Google reviews build instant trust. Families spend ₹30L+ on construction — they need social proof before calling. Reviews convert more leads.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#25D366">
+          <div class="step-num" style="background:linear-gradient(135deg,#25D366,#128C7E)">🤖</div>
+          <div class="step-body"><div class="step-title">WhatsApp AI Bot</div><div class="step-desc">Replies to every lead in 30 seconds, day or night. Sends portfolio, qualifies the enquiry, books site visits — all while Dhiraj is on-site.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#007AFF">
+          <div class="step-num" style="background:linear-gradient(135deg,#007AFF,#0055CC)">📁</div>
+          <div class="step-body"><div class="step-title">Portfolio Automation</div><div class="step-desc">Every lead automatically receives DNS Builders' best project photos, testimonials, and capability statement — without Dhiraj manually sending anything.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#FF3B3B">
+          <div class="step-num" style="background:linear-gradient(135deg,#FF3B3B,#CC0000)">🎬</div>
+          <div class="step-body"><div class="step-title">Video Marketing</div><div class="step-desc">AI-generated videos of Dhiraj's projects on YouTube and Instagram Reels. Increases visibility and trust. People see the quality before calling.</div></div>
+        </div>
+        <div class="guide-step" style="border-left-color:#AF52DE">
+          <div class="step-num" style="background:linear-gradient(135deg,#AF52DE,#7B2FBE)">📨</div>
+          <div class="step-body"><div class="step-title">Automated Follow-ups</div><div class="step-desc">30-day lead nurture sequences via WhatsApp and SMS. Leads who went cold are automatically re-contacted. Turns dead leads into projects.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-title">📞 Ready to Make This Real?</div>
+      <p style="font-size:.68rem;color:#5A7090;line-height:1.75;margin-bottom:12px">ads4you AI Studio is a Pune-based AI automation agency run by <strong style="color:#F0EDE8">Prashant Handge</strong>. UDYAM Certified · UDYAM-MH-26-1092780. All systems shown in this simulator can be set up and running within 2–4 weeks for DNS Builders.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px;padding:12px 14px;background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);text-align:center">
+          <div style="font-size:.5rem;color:rgba(37,211,102,.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">WhatsApp</div>
+          <div style="font-size:.8rem;font-weight:700;color:#25D366">+91 97670 66941</div>
+        </div>
+        <div style="flex:1;min-width:180px;padding:12px 14px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);text-align:center">
+          <div style="font-size:.5rem;color:rgba(201,168,76,.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Email</div>
+          <div style="font-size:.8rem;font-weight:700;color:#C9A84C"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="76171205420f1903360c191e191b171f1a5815191b">[email&#160;protected]</a></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="guide-start-btn" onclick="startSim()">
+      ▶ &nbsp; Launch Simulator
+      <div class="guide-start-label">Tap to open the live business simulator</div>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════ GRID BG ═══════════════ -->
+<div class="grid-bg"></div>
+<div class="glow1"></div>
+<div class="glow2"></div>
+<div class="glow3"></div>
+
+<div class="wrap">
+<!-- ═══════════════ HEADER ═══════════════ -->
+<div class="header">
+  <div>
+    <div class="header-label">ads4you AI Studio — Simulation Engine v2.0</div>
+    <div class="header-title">Contractor Business Simulator</div>
+    <div class="header-sub">DNS Builders · Dhiraj N. Sarwade · Hinjewadi, Pune</div>
+  </div>
+  <div class="header-right">
+    <div class="badge" id="monthBadge" style="display:none">MONTH 0 / 12</div>
+    <div class="badge-gray" id="sysBadge">0 / 7 SYSTEMS</div>
+    <button class="btn-guide" onclick="document.getElementById('guideOverlay').style.display='flex'">? GUIDE</button>
+    <button class="btn-reset" onclick="resetSim()">↺ RESET</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- WIN PANEL -->
+<div class="win-panel" id="winPanel">
+  <div class="win-emoji">🏆</div>
+  <div class="win-title">DNS Builders is Now Digitally Dominant.</div>
+  <div class="win-desc" id="winDesc">Your business is generating massive revenue on full autopilot.</div>
+  <a href="https://wa.me/919767066941?text=Hi Prashant, I want to start this journey for DNS Builders." class="win-cta">💬 Start This Journey — WhatsApp Prashant</a>
+</div>
+
+<!-- HEALTH + REVENUE -->
+<div class="top-grid">
+  <div class="gauge-card" id="gaugeCard">
+    <svg id="gaugeSvg" width="128" height="92" viewBox="0 0 128 92" style="overflow:visible">
+      <defs>
+        <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#FF3B3B"/>
+          <stop offset="50%" style="stop-color:#C9A84C"/>
+          <stop offset="100%" style="stop-color:#00C896"/>
+        </linearGradient>
+      </defs>
+      <circle cx="64" cy="70" r="46" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8" stroke-dasharray="216.4 288.5" stroke-dashoffset="-36.1" stroke-linecap="round"/>
+      <circle id="gaugeArc" cx="64" cy="70" r="46" fill="none" stroke="#FF3B3B" stroke-width="8" stroke-dasharray="0 288.5" stroke-dashoffset="-36.1" stroke-linecap="round" style="transition:stroke-dasharray 1.3s cubic-bezier(.4,0,.2,1);filter:drop-shadow(0 0 8px #FF3B3B88)"/>
+      <text id="gaugeVal" x="64" y="72" text-anchor="middle" fill="#FF3B3B" font-size="26" font-weight="900" font-family="system-ui">12</text>
+      <text x="64" y="86" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="6.5" font-family="system-ui" letter-spacing="1">HEALTH SCORE</text>
+    </svg>
+    <div class="gauge-status" id="gaugeStatus" style="color:#FF3B3B">● CRITICAL</div>
+  </div>
+  <div class="right-col">
+    <div class="rev-card">
+      <div class="rev-label">Monthly Revenue</div>
+      <div class="rev-value" id="revValue">₹80,000</div>
+      <div class="rev-sub">
+        <span class="rev-growth" id="revGrowth">Baseline — activate systems to grow</span>
+        <span class="rev-roi" id="revRoi" style="display:none"></span>
+      </div>
+    </div>
+    <div class="stat-pills">
+      <div class="stat-pill" style="background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.2);border-top:2px solid #C9A84C">
+        <div class="pill-shine"></div>
+        <div class="pill-icon">📍</div>
+        <div class="pill-value" id="pillLeads" style="color:#C9A84C">2</div>
+        <div class="pill-label">Leads/mo</div>
+      </div>
+      <div class="stat-pill" style="background:linear-gradient(135deg,rgba(232,101,26,.1),rgba(232,101,26,.05));border:1px solid rgba(232,101,26,.2);border-top:2px solid #E8651A">
+        <div class="pill-shine" style="animation-delay:.5s"></div>
+        <div class="pill-icon">🏗️</div>
+        <div class="pill-value" id="pillProjects" style="color:#E8651A">1</div>
+        <div class="pill-label">Projects</div>
+      </div>
+      <div class="stat-pill" style="background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.2);border-top:2px solid #C9A84C">
+        <div class="pill-shine" style="animation-delay:1s"></div>
+        <div class="pill-icon">⭐</div>
+        <div class="pill-value" id="pillReviews" style="color:#C9A84C">0</div>
+        <div class="pill-label">Reviews</div>
+      </div>
+      <div class="stat-pill" style="background:linear-gradient(135deg,rgba(74,158,187,.1),rgba(74,158,187,.05));border:1px solid rgba(74,158,187,.2);border-top:2px solid #4A9EBB">
+        <div class="pill-shine" style="animation-delay:1.5s"></div>
+        <div class="pill-icon">🌐</div>
+        <div class="pill-value" id="pillVisits" style="color:#4A9EBB">40</div>
+        <div class="pill-label">Visits</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-card" id="timelineCard">
+  <div class="tl-header">
+    <span class="tl-label">Simulation Timeline</span>
+    <span class="tl-count" id="tlCount">0/12 months</span>
+  </div>
+  <div class="tl-bar"><div class="tl-fill" id="tlFill"></div></div>
+  <div class="months-row" id="monthsRow"></div>
+</div>
+
+<!-- METRICS BARS -->
+<div class="panel">
+  <div class="section-label" style="color:#C9A84C">Performance Metrics</div>
+  <div class="bars-grid">
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-name">Visibility</span><span class="bar-val" id="bvVis" style="color:#C9A84C">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" id="bf-vis" style="background:linear-gradient(90deg,#C9A84C88,#C9A84C,#E8651A);box-shadow:0 0 10px rgba(201,168,76,.4)"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-name">Automation</span><span class="bar-val" id="bvAut" style="color:#E8651A">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" id="bf-aut" style="background:linear-gradient(90deg,#E8651A88,#E8651A,#FF9500);box-shadow:0 0 10px rgba(232,101,26,.4)"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-name">Conversion</span><span class="bar-val" id="bvCon" style="color:#00C896">15%</span></div>
+      <div class="bar-track"><div class="bar-fill" id="bf-con" style="background:linear-gradient(90deg,#00C89688,#00C896,#00E5B0);box-shadow:0 0 10px rgba(0,200,150,.4);width:23%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-header"><span class="bar-name">Leads / Month</span><span class="bar-val" id="bvLed" style="color:#4A9EBB">2</span></div>
+      <div class="bar-track"><div class="bar-fill" id="bf-led" style="background:linear-gradient(90deg,#4A9EBB88,#4A9EBB,#62C0DC);box-shadow:0 0 10px rgba(74,158,187,.4);width:10%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FUNNEL -->
+<div class="panel">
+  <div class="section-label" style="color:#C9A84C">Lead Funnel Pipeline</div>
+  <div class="funnel-row">
+    <div class="funnel-stage" style="position:relative">
+      <div class="funnel-box" style="background:rgba(74,158,187,.1);border:1px solid rgba(74,158,187,.3)">
+        <div class="funnel-fill" id="ff0" style="background:linear-gradient(90deg,rgba(74,158,187,.15),rgba(74,158,187,.3));width:100%"></div>
+        <span class="funnel-val" id="fv0" style="color:#4A9EBB">40</span>
+      </div>
+      <span class="funnel-label">Site Visits</span>
+    </div>
+    <div class="funnel-stage" style="position:relative">
+      <div class="funnel-box" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3)">
+        <div class="funnel-fill" id="ff1" style="background:linear-gradient(90deg,rgba(201,168,76,.15),rgba(201,168,76,.3));width:32%"></div>
+        <span class="funnel-val" id="fv1" style="color:#C9A84C">13</span>
+      </div>
+      <span class="funnel-label">Enquiries</span>
+    </div>
+    <div class="funnel-stage" style="position:relative">
+      <div class="funnel-box" style="background:rgba(232,101,26,.1);border:1px solid rgba(232,101,26,.3)">
+        <div class="funnel-fill" id="ff2" style="background:linear-gradient(90deg,rgba(232,101,26,.15),rgba(232,101,26,.3));width:20%"></div>
+        <span class="funnel-val" id="fv2" style="color:#E8651A">2</span>
+      </div>
+      <span class="funnel-label">Qualified</span>
+    </div>
+    <div class="funnel-stage" style="position:relative">
+      <div class="funnel-box" style="background:rgba(0,200,150,.1);border:1px solid rgba(0,200,150,.3)">
+        <div class="funnel-fill" id="ff3" style="background:linear-gradient(90deg,rgba(0,200,150,.15),rgba(0,200,150,.3));width:10%"></div>
+        <span class="funnel-val" id="fv3" style="color:#00C896">1</span>
+      </div>
+      <span class="funnel-label">Projects</span>
+    </div>
+  </div>
+</div>
+
+<!-- SYSTEMS -->
+<div style="margin-bottom:12px">
+  <div class="systems-label" id="sysLabel" style="color:#C9A84C">Activate Systems</div>
+  <div class="systems-grid" id="systemsGrid"></div>
+</div>
+
+<!-- FEED -->
+<div class="panel">
+  <div class="feed-header" style="color:#C9A84C">Automation Activity Feed<span class="live-dot" id="liveDot" style="display:none">● LIVE</span></div>
+  <div class="feed-scroll" id="feedScroll">
+    <div class="feed-item" style="color:#F0EDE8">🚀 Simulator ready — activate systems to begin</div>
+    <div class="feed-item" style="color:rgba(240,237,232,.3)">📊 Baseline: 2 leads/month · ₹80K revenue · 0 visibility</div>
+  </div>
+</div>
+
+<!-- RUN BUTTON -->
+<button class="run-btn" id="runBtn" onclick="runSim()">▶ &nbsp; Run 12-Month Simulation</button>
+
+</div><!-- /content -->
+</div><!-- /wrap -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const SYSTEMS=[
+  {id:"gbp",name:"Google Business Profile",icon:"🌐",desc:"Get found on Google Maps & Search when people look for contractors in PCMC",effects:{visibility:25,leads:1.4,siteVisits:1.3}},
+  {id:"seo",name:"SEO Optimization",icon:"🔍",desc:"Rank on Page 1 for 'contractor Hinjewadi' and related keywords",effects:{visibility:20,leads:1.3,siteVisits:1.5}},
+  {id:"reviews",name:"Customer Reviews",icon:"⭐",desc:"Build trust through verified Google reviews from past clients",effects:{conversion:1.25,leads:1.2,health:10}},
+  {id:"bot",name:"WhatsApp AI Bot",icon:"🤖",desc:"Auto-replies to every lead in 30 seconds, day or night, 24/7",effects:{conversion:1.35,automation:25,leads:1.2}},
+  {id:"portfolio",name:"Portfolio Automation",icon:"📁",desc:"Auto-sends project gallery and testimonials to every new enquiry",effects:{conversion:1.2,automation:15,health:8}},
+  {id:"video",name:"Video Marketing",icon:"🎬",desc:"AI-generated videos of your projects on YouTube & Instagram Reels",effects:{visibility:15,leads:1.25,health:7}},
+  {id:"followup",name:"Automated Follow-ups",icon:"📨",desc:"30-day WhatsApp sequences that reactivate cold leads automatically",effects:{conversion:1.3,automation:20,leads:1.15}},
+];
+const BASE={visibility:0,leads:2,siteVisits:40,conversion:15,projects:1,revenue:80000,automation:0,health:12,reviews:0};
+const FEED_EVENTS=["🤖 Bot replied to new enquiry in 28 seconds","📋 Portfolio auto-sent to 3 leads","⭐ New 5-star Google review received","📱 WhatsApp follow-up sequence triggered","🌐 DNS Builders appearing in local search","💰 ₹40K receivable alert sent to Dhiraj","📈 Rank improved for 'contractor Hinjewadi'","🎬 AI video published — 340 views in 24hrs","📨 Cold lead from 3 weeks ago just replied","✅ Project enquiry converted to site visit","🔔 Monthly P&L report auto-generated","🏗️ New luxury residential project enquiry","📊 3 hot leads flagged for Dhiraj's review","🌟 JustDial enquiry auto-captured by bot","💼 Site visit booked — ₹8.5L project scope","⭐ Client left 5-star review automatically prompted"];
+const MONTHS=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+let active=[],running=false,simInterval=null,revInterval=null,currentRev=80000,targetRev=80000;
+
+function hColor(h){return h>=80?"#00C896":h>=55?"#C9A84C":h>=35?"#E8651A":"#FF5555"}
+function hStatus(h){return h>=80?"● THRIVING":h>=55?"● GROWING":h>=35?"● BUILDING":"● CRITICAL"}
+
+function calcMetrics(ids){
+  let v=BASE.visibility,l=BASE.leads,sv=BASE.siteVisits,conv=BASE.conversion,auto=BASE.automation,h=BASE.health;
+  SYSTEMS.forEach(s=>{
+    if(!ids.includes(s.id))return;
+    if(s.effects.visibility)v=Math.min(100,v+s.effects.visibility);
+    if(s.effects.leads)l*=s.effects.leads;
+    if(s.effects.siteVisits)sv*=s.effects.siteVisits;
+    if(s.effects.conversion)conv=Math.min(65,conv*s.effects.conversion);
+    if(s.effects.automation)auto=Math.min(100,auto+s.effects.automation);
+    if(s.effects.health)h=Math.min(100,h+s.effects.health);
+  });
+  const projects=Math.max(1,(l*conv)/100);
+  h=Math.min(100,h+(v*0.25)+(auto*0.2)+Math.min(projects*3,20));
+  return{visibility:Math.round(v),leads:Math.round(l*10)/10,siteVisits:Math.round(sv),conversion:Math.round(conv*10)/10,projects:Math.round(projects*10)/10,revenue:Math.round(projects*95000),automation:Math.round(auto),health:Math.round(Math.min(100,h)),reviews:ids.includes("reviews")?Math.min(ids.length*2,18):0};
+}
+
+function updateGauge(h){
+  const col=hColor(h);
+  const arc=216.4*(h/100);
+  const arc_el=document.getElementById('gaugeArc');
+  arc_el.setAttribute('stroke-dasharray',arc+' 288.5');
+  arc_el.setAttribute('stroke',col);
+  arc_el.style.filter=`drop-shadow(0 0 8px ${col}88)`;
+  document.getElementById('gaugeVal').textContent=h;
+  document.getElementById('gaugeVal').setAttribute('fill',col);
+  document.getElementById('gaugeCard').style.border=`1px solid ${col}44`;
+  document.getElementById('gaugeCard').style.boxShadow=`inset 0 0 40px rgba(0,0,0,.3), 0 0 20px ${col}18`;
+  document.getElementById('gaugeStatus').textContent=hStatus(h);
+  document.getElementById('gaugeStatus').style.color=col;
+}
+
+function setMetrics(M){
+  targetRev=M.revenue;
+  updateGauge(M.health);
+  document.getElementById('revGrowth').textContent=M.revenue>BASE.revenue?`▲ +₹${(M.revenue-BASE.revenue).toLocaleString('en-IN')}/mo vs baseline`:"Baseline — activate systems to grow";
+  document.getElementById('revGrowth').style.color=M.revenue>BASE.revenue?"#00C896":"#4A6280";
+  const roi=M.revenue>BASE.revenue?Math.round((M.revenue-BASE.revenue)*12/45000):0;
+  const roiEl=document.getElementById('revRoi');
+  if(roi>0){roiEl.textContent=`ROI: ${roi}x on ₹45K`;roiEl.style.display='inline';}
+  else roiEl.style.display='none';
+  document.getElementById('pillLeads').textContent=M.leads;
+  document.getElementById('pillProjects').textContent=M.projects;
+  document.getElementById('pillReviews').textContent=M.reviews;
+  document.getElementById('pillVisits').textContent=M.siteVisits;
+  document.getElementById('bvVis').textContent=M.visibility+'%';
+  document.getElementById('bvAut').textContent=M.automation+'%';
+  document.getElementById('bvCon').textContent=M.conversion+'%';
+  document.getElementById('bvLed').textContent=M.leads;
+  document.getElementById('bf-vis').style.width=M.visibility+'%';
+  document.getElementById('bf-aut').style.width=M.automation+'%';
+  document.getElementById('bf-con').style.width=Math.min((M.conversion/65)*100,100)+'%';
+  document.getElementById('bf-led').style.width=Math.min((M.leads/Math.max(20,M.leads+2))*100,100)+'%';
+  const visits=M.siteVisits,enq=Math.round(visits*0.32),qual=Math.round(M.leads),proj=Math.round(M.projects*10)/10;
+  document.getElementById('fv0').textContent=visits;
+  document.getElementById('fv1').textContent=enq;document.getElementById('ff1').style.width=Math.max(20,(enq/visits)*100)+'%';
+  document.getElementById('fv2').textContent=qual;document.getElementById('ff2').style.width=Math.max(15,(qual/visits)*100)+'%';
+  document.getElementById('fv3').textContent=proj;document.getElementById('ff3').style.width=Math.max(10,(proj/visits)*100)+'%';
+}
+
+function addFeed(msg){
+  const scroll=document.getElementById('feedScroll');
+  const div=document.createElement('div');div.className='feed-item';div.style.color='#F0EDE8';div.textContent=msg;
+  scroll.insertBefore(div,scroll.firstChild);
+  scroll.querySelectorAll('.feed-item').forEach((el,i)=>{if(i>0)el.style.color=`rgba(240,237,232,${Math.max(.15,.7-i*.05)})`;if(i>15)el.remove();});
+  scroll.scrollTop=0;
+}
+
+// Build months row
+const mRow=document.getElementById('monthsRow');
+MONTHS.forEach((m,i)=>{const d=document.createElement('div');d.className='month-cell';d.id='mc-'+i;d.textContent=m;mRow.appendChild(d);});
+
+// Build systems grid
+const grid=document.getElementById('systemsGrid');
+SYSTEMS.forEach(s=>{
+  const btn=document.createElement('button');
+  btn.className='sys-btn';btn.id='sys-'+s.id;
+  btn.innerHTML=`<div class="sys-header"><span class="sys-icon">${s.icon}</span><span class="sys-name">${s.name}</span></div><div class="sys-desc">${s.desc}</div><div class="sys-tags">${Object.keys(s.effects).map(k=>`<span class="sys-tag">+${k}</span>`).join('')}</div>`;
+  btn.onclick=()=>toggleSys(s.id);
+  grid.appendChild(btn);
+});
+
+function toggleSys(id){
+  if(running)return;
+  const idx=active.indexOf(id);
+  if(idx>=0){active.splice(idx,1);document.getElementById('sys-'+id).classList.remove('active');}
+  else{active.push(id);document.getElementById('sys-'+id).classList.add('active');}
+  document.getElementById('sysBadge').textContent=active.length+' / 7 SYSTEMS';
+  document.getElementById('sysLabel').innerHTML=`<span style="background:linear-gradient(135deg,#C9A84C,#E8651A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:.44rem;letter-spacing:3px;text-transform:uppercase;font-weight:700">Activate Systems${active.length>0?' <span style="-webkit-text-fill-color:#C9A84C">('+active.length+' active)</span>':''}</span>`;
+  setMetrics(calcMetrics(active));
+  addFeed((idx>=0?'⏹ ':'▶ ')+SYSTEMS.find(s=>s.id===id).name+(idx>=0?' deactivated':' activated'));
+}
+
+function runSim(){
+  if(active.length===0){addFeed("⚠️ Activate at least one system first!");return;}
+  clearInterval(simInterval);clearInterval(revInterval);
+  running=true;
+  document.getElementById('winPanel').style.display='none';
+  document.getElementById('runBtn').disabled=true;
+  document.getElementById('liveDot').style.display='inline';
+  document.getElementById('timelineCard').style.display='block';
+  document.getElementById('monthBadge').style.display='flex';
+  revInterval=setInterval(()=>{
+    const diff=targetRev-currentRev;
+    if(Math.abs(diff)<300){currentRev=targetRev;}
+    else currentRev+=diff*0.1;
+    document.getElementById('revValue').textContent='₹'+Math.round(currentRev).toLocaleString('en-IN');
+  },50);
+  const target=calcMetrics(active);
+  let month=0;
+  addFeed("🎬 12-Month simulation started — watch DNS Builders transform...");
+  simInterval=setInterval(()=>{
+    month++;
+    const eased=1-Math.pow(1-month/12,2.2);
+    const cur={
+      visibility:Math.round(BASE.visibility+(target.visibility-BASE.visibility)*eased),
+      leads:Math.round((BASE.leads+(target.leads-BASE.leads)*eased)*10)/10,
+      siteVisits:Math.round(BASE.siteVisits+(target.siteVisits-BASE.siteVisits)*eased),
+      conversion:Math.round((BASE.conversion+(target.conversion-BASE.conversion)*eased)*10)/10,
+      projects:Math.round((BASE.projects+(target.projects-BASE.projects)*eased)*10)/10,
+      revenue:Math.round(BASE.revenue+(target.revenue-BASE.revenue)*eased),
+      automation:Math.round(BASE.automation+(target.automation-BASE.automation)*eased),
+      health:Math.round(BASE.health+(target.health-BASE.health)*eased),
+      reviews:Math.round(month*(active.includes("reviews")?0.75:0.08)),
+    };
+    setMetrics(cur);
+    document.getElementById('monthBadge').textContent='MONTH '+month+' / 12';
+    document.getElementById('tlCount').textContent=month+'/12 months';
+    document.getElementById('tlFill').style.width=((month/12)*100)+'%';
+    document.getElementById('runBtn').textContent='⏳  Simulating Month '+month+' of 12...';
+    MONTHS.forEach((m,i)=>{
+      const el=document.getElementById('mc-'+i);
+      if(i<month){el.style.background=i===month-1?'rgba(0,200,150,.2)':'rgba(201,168,76,.1)';el.style.borderColor=i===month-1?'rgba(0,200,150,.5)':'rgba(201,168,76,.25)';el.style.color=i===month-1?'#00C896':'#C9A84C';el.style.fontWeight=i===month-1?'800':'400';}
+      else{el.style.background='rgba(255,255,255,.02)';el.style.borderColor='rgba(255,255,255,.04)';el.style.color='rgba(255,255,255,.2)';el.style.fontWeight='400';}
+    });
+    addFeed('Month '+month+' › '+FEED_EVENTS[Math.floor(Math.random()*FEED_EVENTS.length)]);
+    if(month>=12){
+      clearInterval(simInterval);running=false;
+      clearInterval(revInterval);currentRev=target.revenue;
+      document.getElementById('revValue').textContent='₹'+target.revenue.toLocaleString('en-IN');
+      document.getElementById('liveDot').style.display='none';
+      document.getElementById('runBtn').disabled=false;
+      document.getElementById('runBtn').textContent='▶  Run Simulation Again';
+      addFeed("🏆 12-Month simulation complete — DNS Builders is transformed!");
+      if(cur.health>=90){
+        setTimeout(()=>{
+          const roi=Math.round((cur.revenue-BASE.revenue)*12/45000);
+          document.getElementById('winDesc').innerHTML=`DNS Builders now generates <strong style="color:#C9A84C">₹${(cur.revenue/100000).toFixed(1)}L/month</strong> with <strong style="color:#C9A84C">${cur.leads} digital leads</strong> running on autopilot.<br>ROI: <strong style="color:#00C896">${roi}x</strong> on your ₹45,000 investment.`;
+          document.getElementById('winPanel').style.display='block';
+          setTimeout(()=>document.getElementById('winPanel').scrollIntoView({behavior:'smooth'}),100);
+        },600);
+      }
+    }
+  },850);
+}
+
+function resetSim(){
+  clearInterval(simInterval);clearInterval(revInterval);
+  running=false;active=[];currentRev=80000;targetRev=80000;
+  SYSTEMS.forEach(s=>document.getElementById('sys-'+s.id).classList.remove('active'));
+  document.getElementById('sysBadge').textContent='0 / 7 SYSTEMS';
+  document.getElementById('sysLabel').innerHTML='<span style="background:linear-gradient(135deg,#C9A84C,#E8651A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:.44rem;letter-spacing:3px;text-transform:uppercase;font-weight:700">Activate Systems</span>';
+  document.getElementById('monthBadge').style.display='none';
+  document.getElementById('timelineCard').style.display='none';
+  document.getElementById('winPanel').style.display='none';
+  document.getElementById('liveDot').style.display='none';
+  document.getElementById('runBtn').disabled=false;
+  document.getElementById('runBtn').textContent='▶  Run 12-Month Simulation';
+  document.getElementById('tlFill').style.width='0%';
+  MONTHS.forEach((m,i)=>{const el=document.getElementById('mc-'+i);el.style.background='rgba(255,255,255,.02)';el.style.borderColor='rgba(255,255,255,.04)';el.style.color='rgba(255,255,255,.2)';el.style.fontWeight='400';});
+  setMetrics(BASE);
+  document.getElementById('revValue').textContent='₹80,000';
+  document.getElementById('feedScroll').innerHTML='<div class="feed-item" style="color:#F0EDE8">🔄 Simulator reset — all systems cleared</div><div class="feed-item" style="color:rgba(240,237,232,.3)">📊 Baseline: 2 leads/month · ₹80K revenue · 0 visibility</div>';
+}
+
+function startSim(){
+  document.getElementById('guideOverlay').style.display='none';
+}
+
+setMetrics(BASE);
+setInterval(()=>{
+  const diff=targetRev-current
