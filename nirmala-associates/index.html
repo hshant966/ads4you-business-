@@ -24,45 +24,50 @@
    DESIGN TOKENS
 ══════════════════════════════════════════ */
 :root {
-  /* Backgrounds */
-  --bg:      #0F172A;
-  --bg2:     #162035;
-  --bg3:     #1C2B45;
-  --bg4:     #223050;
+  /* ── UI-UX Pro Max: Trust & Authority pattern
+     Construction/Home Services rule applied
+     Palette: Authority navy #0F172A + Premium gold #CA8A04 + Trust navy bg
+  ── */
 
-  /* Primary — warm gold CTA (from skill: CTA #B45309 adapted) */
-  --gold:    #D4920A;
-  --gold2:   #F0AA18;
-  --gold-bg: rgba(212,146,10,.1);
-  --gold-bd: rgba(212,146,10,.22);
+  /* Backgrounds — deep navy authority (Consulting Firm palette from skill) */
+  --bg:      #0A0F1E;
+  --bg2:     #111827;
+  --bg3:     #1A2436;
+  --bg4:     #1F2D42;
 
-  /* Accent — safety orange (from skill: Construction CTA #F97316) */
-  --ora:     #E8621A;
-  --ora-bg:  rgba(232,98,26,.1);
+  /* Primary — premium gold CTA (skill: #CA8A04 — authority navy + premium gold) */
+  --gold:    #CA8A04;
+  --gold2:   #EAA820;
+  --gold-bg: rgba(202,138,4,.1);
+  --gold-bd: rgba(202,138,4,.25);
 
-  /* Success — teal green */
-  --grn:     #10B981;
-  --grn-bg:  rgba(16,185,129,.1);
-  --grn-bd:  rgba(16,185,129,.2);
+  /* Accent — warm amber (CTA action color) */
+  --ora:     #D97706;
+  --ora-bg:  rgba(217,119,6,.1);
+
+  /* Success — emerald green (trust/growth) */
+  --grn:     #059669;
+  --grn-bg:  rgba(5,150,105,.1);
+  --grn-bd:  rgba(5,150,105,.22);
 
   /* Danger */
-  --red:     #EF4444;
-  --red-bg:  rgba(239,68,68,.1);
-  --red-bd:  rgba(239,68,68,.2);
+  --red:     #DC2626;
+  --red-bg:  rgba(220,38,38,.1);
+  --red-bd:  rgba(220,38,38,.22);
 
-  /* Trust blue */
-  --blu:     #3B82F6;
-  --blu-bg:  rgba(59,130,246,.1);
+  /* Trust authority blue (skill: secondary #1E40AF) */
+  --blu:     #1E40AF;
+  --blu-bg:  rgba(30,64,175,.12);
 
-  /* Purple — SARTHI AI accent only */
-  --pur:     #8B5CF6;
-  --pur-bg:  rgba(139,92,246,.1);
-  --pur-bd:  rgba(139,92,246,.22);
+  /* Purple — SARTHI AI accent only (intentionally vibrant vs authority palette) */
+  --pur:     #7C3AED;
+  --pur-bg:  rgba(124,58,237,.1);
+  --pur-bd:  rgba(124,58,237,.25);
 
-  /* Text */
-  --t1:  #F1EEE8;
-  --t2:  #94A3B8;
-  --t3:  #475569;
+  /* Text — warm authority tones */
+  --t1:  #F8F4EE;
+  --t2:  #8FA3BE;
+  --t3:  #3D5068;
 
   /* Borders */
   --bd:  rgba(255,255,255,.07);
@@ -1095,14 +1100,63 @@ img,svg{display:block;max-width:100%}
 <div class="container">
 
   <div class="sec-header">
-    <div class="sec-label"><span class="sec-label-text">Live AI Calling Demo</span><div class="sec-label-line"></div></div>
-    <h2 class="display display-lg" style="margin-bottom:8px">SARTHI la Marathi madhye bola</h2>
-    <p class="body-lg">He ek working demo aahe SARTHI kasa bolto te dikhawnyasathi. Koni pan message Marathi, Hindi, ani English madhye type karu shakto — SARTHI respond karanar Nirmala Associates chya AI PA pramane.</p>
+    <div class="sec-label"><span class="sec-label-text">Live AI Voice Calling Agent</span><div class="sec-label-line"></div></div>
+    <h2 class="display display-lg" style="margin-bottom:8px">SARTHI shia bola — Ata Tikde, Browser madhye</h2>
+    <p class="body-lg"><strong style="color:var(--gold)">Real working voice demo</strong> — tumhi directly mic madhe bola, SARTHI aika ani Marathi madhye respond karto. Koni phone, koni app nahi. Fakt browser — 100% free.</p>
   </div>
 
-  <div class="card card-pur" style="margin-bottom:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <div class="badge badge-pur"><span class="badge-dot"></span> Demo Mode — Free</div>
-    <p class="body-sm" style="flex:1;min-width:200px">He demo free aahe — Bolna AI / Vapi.ai waprun real Marathi voice calling system deploy karu. Demo close kelyanantar paid system samgra set up hoto.</p>
+  <!-- VOICE AGENT HERO CARD -->
+  <div style="background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(30,64,175,.07));border:1px solid var(--pur-bd);padding:28px 20px 24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden;border-radius:4px">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,.07),transparent 60%);pointer-events:none"></div>
+
+    <!-- AVATAR WITH PULSE RINGS -->
+    <div style="position:relative;width:96px;height:96px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center">
+      <div id="ring1" style="position:absolute;inset:-10px;border-radius:50%;border:1.5px solid rgba(124,58,237,.12);transition:all .3s"></div>
+      <div id="ring2" style="position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(124,58,237,.07);transition:all .3s"></div>
+      <div id="callAvatar" style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--pur),#4338CA);display:flex;align-items:center;justify-content:center;transition:all .3s;cursor:default">
+        <svg width="38" height="38" viewBox="0 0 20 20" fill="white"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v1h-3zM4.75 14.094A5.973 5.973 0 004 17v1H1v-1a3 3 0 013.75-2.906z"/></svg>
+      </div>
+    </div>
+
+    <div style="font-family:var(--ff-display);font-size:1.4rem;font-weight:700;color:var(--t1);margin-bottom:4px">SARTHI</div>
+    <div id="callStatusText" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--t2);margin-bottom:18px;transition:color .3s">Ready to Answer</div>
+
+    <!-- WAVEFORM (visible during call) -->
+    <div id="waveWrap" style="display:none;justify-content:center;align-items:flex-end;gap:3px;height:28px;margin-bottom:14px">
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .1s infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .2s infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .3s infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .4s infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .2s infinite alternate"></div>
+      <div class="wave-bar" style="width:4px;border-radius:2px;background:var(--pur);animation:waveAnim .6s ease-in-out .1s infinite alternate"></div>
+    </div>
+
+    <!-- CALL CONTROLS -->
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:14px">
+      <button id="btnCall" onclick="startCall()" style="min-width:148px;min-height:52px;background:linear-gradient(135deg,#16A34A,#15803D);border:none;color:#fff;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:28px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(22,163,74,.3);font-family:var(--ff-body)">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+        Call SARTHI
+      </button>
+      <button id="btnEnd" onclick="endCall()" style="min-width:148px;min-height:52px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:#F87171;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:28px;display:none;align-items:center;justify-content:center;gap:8px;transition:all .2s;font-family:var(--ff-body)">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        End Call
+      </button>
+    </div>
+
+    <!-- QUICK SCENARIO BUTTONS -->
+    <div style="margin-bottom:10px">
+      <div style="font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px">Ya topics var bola:</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button onclick="injectScenario('site')" style="padding:8px 14px;min-height:36px;background:rgba(202,138,4,.1);border:1px solid rgba(202,138,4,.25);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--ff-body)">Site Update</button>
+        <button onclick="injectScenario('payment')" style="padding:8px 14px;min-height:36px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25);color:var(--grn);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--ff-body)">Payment</button>
+        <button onclick="injectScenario('worker')" style="padding:8px 14px;min-height:36px;background:rgba(30,64,175,.1);border:1px solid rgba(30,64,175,.25);color:#93C5FD;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--ff-body)">Workers</button>
+        <button onclick="injectScenario('schedule')" style="padding:8px 14px;min-height:36px;background:var(--pur-bg);border:1px solid var(--pur-bd);color:var(--pur);font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--ff-body)">Schedule</button>
+        <button onclick="injectScenario('lead')" style="padding:8px 14px;min-height:36px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);color:#FCA5A5;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .2s;font-family:var(--ff-body)">New Lead</button>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--t3);font-family:var(--ff-mono);letter-spacing:.5px">Chrome / Edge madhe best · Mic permission dyavi lagel</div>
   </div>
 
   <div class="demo-layout">
@@ -1455,6 +1509,19 @@ img,svg{display:block;max-width:100%}
 </div><!-- /page -->
 
 <style>
+
+/* ── VOICE AGENT ── */
+@keyframes waveAnim {
+  from { height: 4px; opacity: .5; }
+  to   { height: 22px; opacity: 1; }
+}
+@keyframes ringPulse {
+  0%   { transform: scale(1);   opacity: .6; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+.call-active #ring1 { animation: ringPulse 1.4s ease-out infinite; }
+.call-active #ring2 { animation: ringPulse 1.4s ease-out .35s infinite; }
+
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 
@@ -1473,86 +1540,234 @@ function showTab(name, triggerBtn) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ══ SARTHI DEMO CHAT ══ */
-const RESPONSES = {
-  site: "Mi SARTHI — Nirmala Associates cha AI PA.\n\nAajchi Site Reports:\n\nShinde Bungalow — Flooring 60% complete\nKulkarni Renovation — Painting 40%\nPatil Office — Complete 90%\n\nSahaj Sir la detailed report WhatsApp war pathavla aahe.",
-  payment: "Pending Payments Report:\n\nDesai Renovation — ₹75,000 (8 diwas overdue)\nJoshi Bungalow — ₹1,20,000 (ya aathwadhyat due)\n\nSARTHI ne Desai sahebana reminder call kela — Thursday la pathawato mhanaley.",
-  lead: "Namaskar! Nirmala Associates - Latur.\n\nTumcha enquiry milala. Sahaj Sir cha 10+ varshanche experience construction ani interior design madhye aahe.\n\nPortfolio WhatsApp war pathawto...\nSite visit saathi best time sangaychay ka?\n\nSahaj Sir la alert kela aahe.",
-  worker: "Aajche Workers Report:\n\nShinde Site — 4 workers (Ramesh + team)\nKulkarni Site — 3 workers\nPatil Office — 5 workers\n\nTotal: 12 workers aaj. Sarvanche attendance 100%.",
-  schedule: "Sahaj Sir, subh sakal!\n\nAajcha schedule (9:00 AM):\n\n9:15 AM — Patil site cement delivery confirm\n10:00 AM — Desai client site visit\n10:30 AM — Kulkarni payment follow-up (SARTHI karanar)\n6:00 PM — Site reports collect honar\n\nAaj 4 priority tasks.",
-  default_msgs: [
-    "Namaskar ji! Mi SARTHI boltoy.\n\nTumchi request note keli. Sahaj Sir la alert pathawto.\n\n2 tasaat callback milel. Urgent asel tar 'URGENT' lihun pathawa — mi Sahaj Sir la turant saangto.",
-    "Samjhle! Hi mahiti process karto.\n\nSahaj Sir aata site inspection la ahet. Mi tumcha message carefully note kela aahe.\n\nNirmala Associates cha follow-up tumhala najikcha business diwasi milel.",
-  ]
+/* ══════════════════════════════════════════════
+   SARTHI VOICE AGENT — Web Speech API (100% Free)
+   Uses: SpeechRecognition (STT) + SpeechSynthesis (TTS)
+   No API key · No server · Works in Chrome/Edge
+══════════════════════════════════════════════ */
+
+const SARTHI_RESPONSES = {
+  site:     "Namaskar! Mi SARTHI boltoy. Aajchi site reports: Shinde Bungalow madhye flooring saath टक्के complete zali aahe. Kulkarni Renovation madhye painting chalto — chalis टक्के. Patil Office navvad टक्के complete. Sahaj Sir la detailed report WhatsApp var pathawla aahe.",
+  payment:  "Pending payments report: Desai Renovation — pachatter hazaar rupaye, aath diwas overdue. Joshi Bungalow — ek lakh vees hazaar rupaye, ya aathwadhyat due. SARTHI ne Desai sahebana reminder call kela — te Thursday la pathawato mhanaley.",
+  worker:   "Aajche workers: Shinde site var chaar workers, Ramesh ani tyacha team. Kulkarni site var teen workers. Patil Office var paach workers. Aajakun baara workers, ani sagalyanche attendance shata टक्के aahe.",
+  schedule: "Sahaj Sir, subh sakal! Aajcha schedule: navach wajata Patil site war cement delivery confirm karaychi aahe. Das wajata Desai client shee site visit aahe. Sawa das wajata Kulkarni payment follow-up SARTHI karanar. Sandhyakali saha wajata site reports collect honar.",
+  lead:     "Namaskar! Nirmala Associates boltoy. Tumcha enquiry milala. Sahaj Sir cha das peksha jaast varshanche experience construction ani interior design madhye aahe. Mi tumhala portfolio WhatsApp var pathawto. Site visit saathi kadhihi yeta? Sahaj Sir la alert kela aahe.",
+  default:  ["Namaskar ji! Mi SARTHI boltoy — Nirmala Associates cha AI Personal Assistant. Sahaj Sir aata site war ahet. Tumchi mahiti note keli. Tumhala kay saangayche aahe?",
+             "Samjhle. Hi mahiti process karto. Sahaj Sir la alert pathawto. Do tasaat callback milel. Urgent asel tar URGENT mhanun sangaa — mi Sahaj Sir la turant saangto.",
+             "He SARTHI aahe — Nirmala Associates cha AI sarathi. Tumchi seva karayla mi sadasar ready aahe. Site update, payments, workers, schedule — kahi pan vicharaa."]
 };
 
+// TTS — speak in Marathi/Hindi
+function speak(text, onEnd) {
+  if (!window.speechSynthesis) { if(onEnd) onEnd(); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  // Prefer hi-IN (Hindi/Marathi TTS available in Chrome)
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang === 'hi-IN') ||
+                    voices.find(v => v.lang.startsWith('hi')) ||
+                    voices.find(v => v.lang === 'mr-IN') ||
+                    voices[0];
+  if (preferred) u.voice = preferred;
+  u.lang = 'hi-IN';
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  u.volume = 1;
+  if (onEnd) u.onend = onEnd;
+  window.speechSynthesis.speak(u);
+}
+
+// STT state
+let recognition = null;
+let isCallActive = false;
+let isSpeaking = false;
 let msgIdx = 0;
 
 function getReply(text) {
   const l = text.toLowerCase();
-  if (/site|update|status|kaam|progress|renovation|bungalow|office/.test(l)) return RESPONSES.site;
-  if (/payment|paise|due|borje|outstanding|reminder/.test(l)) return RESPONSES.payment;
-  if (/lead|enquiry|renovation|nava|interior|ghar|karavyach/.test(l)) return RESPONSES.lead;
-  if (/worker|labour|employee|kitne|kaiti|manase/.test(l)) return RESPONSES.worker;
-  if (/schedule|plan|aaj|today|morning|savali|9 am/.test(l)) return RESPONSES.schedule;
-  return RESPONSES.default_msgs[msgIdx++ % RESPONSES.default_msgs.length];
+  if (/site|kaam|progress|shinde|kulkarni|patil|update|status|office/.test(l)) return SARTHI_RESPONSES.site;
+  if (/payment|paise|due|borje|outstanding|hazaar|lakh|rupay/.test(l)) return SARTHI_RESPONSES.payment;
+  if (/worker|manase|labour|employee|kaiti|kitne|site war/.test(l)) return SARTHI_RESPONSES.worker;
+  if (/schedule|plan|aaj|today|morning|savali|9|nav|das/.test(l)) return SARTHI_RESPONSES.schedule;
+  if (/lead|enquiry|nava|interior|ghar|karavyach|renovation/.test(l)) return SARTHI_RESPONSES.lead;
+  return SARTHI_RESPONSES.default[msgIdx++ % SARTHI_RESPONSES.default.length];
 }
 
-function quickDemo(type) {
-  const messages = {
-    client_update: "Aajcha site update sangaa",
-    site_report: "Site report kaay aahe aaj?",
-    payment: "Pending payments kitki aahet?"
-  };
-  const input = document.getElementById('chatInput');
-  if (input) { input.value = messages[type] || ''; sendMsg(); }
+function setCallStatus(text, color) {
+  const el = document.getElementById('callStatusText');
+  if (el) { el.textContent = text; el.style.color = color || 'var(--t2)'; }
 }
 
-function sendMsg() {
-  const input = document.getElementById('chatInput');
-  const text = (input.value || '').trim();
-  if (!text) return;
-  input.value = '';
+function setAvatarState(state) {
+  const av = document.getElementById('callAvatar');
+  const wrap = av ? av.closest('[style*="position:relative"]') : null;
+  if (!av) return;
+  if (state === 'active') {
+    av.style.boxShadow = '0 0 0 8px rgba(124,58,237,.15)';
+    av.style.background = 'linear-gradient(135deg,#7C3AED,#4338CA)';
+  } else if (state === 'speaking') {
+    av.style.boxShadow = '0 0 0 12px rgba(22,163,74,.15)';
+    av.style.background = 'linear-gradient(135deg,#16A34A,#15803D)';
+  } else {
+    av.style.boxShadow = 'none';
+    av.style.background = 'linear-gradient(135deg,var(--pur),#4338CA)';
+  }
+}
 
+function showWave(show) {
+  const w = document.getElementById('waveWrap');
+  if (w) w.style.display = show ? 'flex' : 'none';
+}
+
+function addChatMsg(text, isAi, lang) {
   const msgs = document.getElementById('chatMsgs');
-
-  // User message
-  const userDiv = document.createElement('div');
-  userDiv.className = 'call-msg call-msg-user';
-  userDiv.innerHTML = text + '<div class="call-msg-time">Aata</div>';
-  msgs.appendChild(userDiv);
+  if (!msgs) return;
+  const d = document.createElement('div');
+  d.className = 'call-msg ' + (isAi ? 'call-msg-ai' : 'call-msg-user');
+  const now = new Date();
+  const t = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  d.innerHTML = (isAi ? '<div class="call-msg-lang">'+(lang||'SARTHI · Marathi')+'</div>' : '') +
+                text.replace(/\n/g,'<br>') +
+                '<div class="call-msg-time">'+t+'</div>';
+  msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addWANotif(text) {
+  const wa = document.getElementById('waMsgs');
+  if (!wa) return;
+  const now = new Date();
+  const t = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  const d = document.createElement('div');
+  d.className = 'wa-msg wa-msg-in';
+  d.innerHTML = '<div style="font-size:12px">'+text+'</div><div class="wa-time">'+t+' <span class="wa-tick">✓✓</span></div>';
+  wa.appendChild(d);
+  wa.scrollTop = wa.scrollHeight;
+}
+
+function handleUserSpeech(text) {
+  if (!text.trim()) return;
+  addChatMsg(text, false);
 
   // Typing indicator
+  const msgs = document.getElementById('chatMsgs');
   const typing = document.createElement('div');
+  typing.id = 'typing';
   typing.className = 'typing-indicator';
-  typing.setAttribute('aria-label', 'SARTHI is typing');
   typing.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-  msgs.appendChild(typing);
-  msgs.scrollTop = msgs.scrollHeight;
+  if (msgs) { msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight; }
+
+  setCallStatus('SARTHI Vicharato...', 'var(--gold)');
+  setAvatarState('speaking');
+  showWave(true);
 
   setTimeout(() => {
-    typing.remove();
     const reply = getReply(text);
-    const aiDiv = document.createElement('div');
-    aiDiv.className = 'call-msg call-msg-ai';
-    aiDiv.innerHTML = '<div class="call-msg-lang">SARTHI · Marathi / Hinglish</div>' + reply.replace(/\n/g, '<br>') + '<div class="call-msg-time">Aata</div>';
-    msgs.appendChild(aiDiv);
-    msgs.scrollTop = msgs.scrollHeight;
-
-    // Add to WhatsApp preview
-    const now = new Date();
-    const time = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
-    const wa = document.getElementById('waMsgs');
-    const waDiv = document.createElement('div');
-    waDiv.className = 'wa-msg wa-msg-in';
-    waDiv.innerHTML = '<div style="font-size:12px">SARTHI interaction logged:<br>"' + text.substring(0,35) + (text.length > 35 ? '...' : '') + '"<br>Marathi madhye responded</div><div class="wa-time">' + time + ' <span class="wa-tick">✓✓</span></div>';
-    wa.appendChild(waDiv);
-    wa.scrollTop = wa.scrollHeight;
-  }, 1400);
+    const tyEl = document.getElementById('typing');
+    if (tyEl) tyEl.remove();
+    addChatMsg(reply, true);
+    addWANotif('SARTHI ne respond kela: "'+text.substring(0,30)+(text.length>30?'...':'')+'"');
+    speak(reply, () => {
+      if (isCallActive) {
+        setAvatarState('active');
+        showWave(false);
+        setCallStatus('Tumhi Bola — SARTHI Aikto', 'var(--pur)');
+        startListening();
+      }
+    });
+  }, 600);
 }
 
-document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+function startListening() {
+  if (!isCallActive) return;
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) { setCallStatus('Browser support nahi — Chrome vapara', 'var(--red)'); return; }
+
+  recognition = new SpeechRec();
+  recognition.lang = 'hi-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = (e) => {
+    const t = e.results[0][0].transcript;
+    handleUserSpeech(t);
+  };
+  recognition.onerror = (e) => {
+    if (e.error === 'no-speech') { if (isCallActive) startListening(); return; }
+    if (e.error === 'not-allowed') { setCallStatus('Mic permission nahi dili', 'var(--red)'); endCall(); }
+  };
+  recognition.onend = () => { /* handled in onresult */ };
+
+  try { recognition.start(); } catch(e) {}
+}
+
+function startCall() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    alert('Tumcha browser voice support karat nahi. Google Chrome vapara.');
+    return;
+  }
+  isCallActive = true;
+  document.getElementById('btnCall').style.display = 'none';
+  document.getElementById('btnEnd').style.display = 'flex';
+  setAvatarState('active');
+  showWave(true);
+
+  const greeting = "Namaskar! Mi SARTHI boltoy — Nirmala Associates cha AI Personal Assistant. Sahaj Sir aata site war ahet. Mi tumchi madad karu shakto. Kahi pan vicharaa — site update, payments, workers, ya schedule.";
+  setCallStatus('SARTHI Boltoye...', 'var(--grn)');
+  addChatMsg(greeting, true, 'SARTHI · Marathi');
+  addWANotif('SARTHI Call Started — Client connected');
+
+  speak(greeting, () => {
+    if (isCallActive) {
+      setCallStatus('Tumhi Bola — SARTHI Aikto', 'var(--pur)');
+      setAvatarState('active');
+      showWave(false);
+      startListening();
+    }
+  });
+}
+
+function endCall() {
+  isCallActive = false;
+  if (recognition) { try { recognition.stop(); recognition.abort(); } catch(e){} recognition = null; }
+  window.speechSynthesis.cancel();
+  setAvatarState('idle');
+  showWave(false);
+  setCallStatus('Call Ended', 'var(--t3)');
+  document.getElementById('btnCall').style.display = 'flex';
+  document.getElementById('btnEnd').style.display = 'none';
+  addChatMsg('--- Call Completed ---', true, 'System');
+  addWANotif('Call ended. SARTHI summary Sahaj Dada la pathawato...');
+}
+
+function injectScenario(type) {
+  const queries = {
+    site: 'aajchi site update sangaa',
+    payment: 'pending payments kiti aahet',
+    worker: 'aaj site war kiti workers ahet',
+    schedule: 'aajcha schedule sangaa',
+    lead: 'nava lead aahe'
+  };
+  if (!isCallActive) {
+    // If call not active, simulate text-only
+    handleUserSpeech(queries[type] || 'Hello SARTHI');
+  } else {
+    handleUserSpeech(queries[type] || 'Hello SARTHI');
+  }
+}
+
+// Init voices on load
+window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+
+// Keep text input working too
+document.getElementById('chatInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const v = e.target.value.trim();
+    if (v) { handleUserSpeech(v); e.target.value = ''; }
+  }
+});
 </script>
 </body>
 </html>
