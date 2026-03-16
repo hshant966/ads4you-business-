@@ -30,10 +30,10 @@
   ── */
 
   /* Backgrounds — deep navy authority (Consulting Firm palette from skill) */
-  --bg:      #0A0F1E;
-  --bg2:     #111827;
-  --bg3:     #1A2436;
-  --bg4:     #1F2D42;
+  --bg:      #0D0E17;
+  --bg2:     #141520;
+  --bg3:     #1C1E2E;
+  --bg4:     #222436;
 
   /* Primary — premium gold CTA (skill: #CA8A04 — authority navy + premium gold) */
   --gold:    #CA8A04;
@@ -106,11 +106,46 @@ img,svg{display:block;max-width:100%}
    BACKGROUND SYSTEM
 ══════════════════════════════════════════ */
 .bg-wrap{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(212,146,10,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,146,10,.03) 1px,transparent 1px);background-size:36px 36px}
-.bg-orb{position:absolute;border-radius:50%;filter:blur(90px)}
-.bg-orb-gold{width:55vw;height:55vw;max-width:500px;max-height:500px;top:-15%;left:-10%;background:radial-gradient(circle,rgba(212,146,10,.09),transparent 70%);animation:orbFloat 22s ease-in-out infinite alternate}
-.bg-orb-grn{width:45vw;height:45vw;max-width:420px;max-height:420px;bottom:-10%;right:-8%;background:radial-gradient(circle,rgba(16,185,129,.07),transparent 70%);animation:orbFloat 18s ease-in-out infinite alternate-reverse}
-.bg-orb-mid{width:35vw;height:35vw;max-width:320px;max-height:320px;top:45%;left:45%;background:radial-gradient(circle,rgba(59,130,246,.05),transparent 70%);animation:orbFloat 14s ease-in-out infinite alternate}
+
+/* Aurora mesh gradient — Skill: Aurora UI complementary blue-orange + purple-gold */
+.bg-aurora{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(202,138,4,.18)   0%,transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 100%,rgba(124,58,237,.14)  0%,transparent 55%),
+    radial-gradient(ellipse 60% 70% at 100% 0%,  rgba(30,64,175,.12)   0%,transparent 55%),
+    radial-gradient(ellipse 55% 55% at 0% 100%,  rgba(5,150,105,.1)    0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%,  rgba(202,138,4,.05)   0%,transparent 65%);
+  animation:auroraShift 18s ease-in-out infinite alternate;
+  filter:blur(0px);
+}
+@keyframes auroraShift{
+  0%  {background-position:0% 0%,100% 100%,100% 0%,0% 100%,50% 50%}
+  33% {background-position:30% 20%,70% 80%,80% 20%,20% 70%,60% 40%}
+  66% {background-position:10% 40%,90% 60%,70% 30%,30% 60%,45% 55%}
+  100%{background-position:20% 10%,80% 90%,90% 10%,10% 90%,55% 45%}
+}
+
+/* Subtle grid overlay */
+.bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(202,138,4,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(202,138,4,.035) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* 3D floating particles canvas */
+#particleCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+
+/* Noise texture for depth */
+.bg-noise{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+  mix-blend-mode:overlay;
+}
+
 @keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(3%,4%) scale(1.08)}}
 
 /* ══════════════════════════════════════════
@@ -131,7 +166,7 @@ img,svg{display:block;max-width:100%}
 /* ══════════════════════════════════════════
    NAVIGATION — mobile-first, sticky
 ══════════════════════════════════════════ */
-.nav{position:sticky;top:0;z-index:var(--z-nav);background:rgba(15,23,42,.94);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--bd)}
+.nav{position:sticky;top:0;z-index:var(--z-nav);background:rgba(13,14,23,.88);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(202,138,4,.12);box-shadow:0 1px 0 rgba(202,138,4,.08)}
 
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:12px}
 @media(min-width:768px){.nav-inner{padding:14px 28px}}
@@ -177,8 +212,23 @@ img,svg{display:block;max-width:100%}
 /* ══════════════════════════════════════════
    CARD SYSTEM
 ══════════════════════════════════════════ */
-.card{background:var(--bg2);border:1px solid var(--bd);border-radius:2px;padding:20px;transition:background var(--tr), border-color var(--tr)}
-.card:hover{background:var(--bg3)}
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:4px;
+  padding:20px;
+  transition:all 250ms ease;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transform-style:preserve-3d;
+  transform:perspective(1000px) rotateX(0deg) rotateY(0deg);
+}
+.card:hover{
+  background:rgba(255,255,255,.07);
+  border-color:rgba(202,138,4,.3);
+  box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(202,138,4,.12);
+  transform:perspective(1000px) translateY(-3px);
+}
 
 .card-gold{border-color:var(--gold-bd);background:linear-gradient(135deg,rgba(212,146,10,.06),transparent)}
 .card-grn{border-color:var(--grn-bd);background:linear-gradient(135deg,rgba(16,185,129,.06),transparent)}
@@ -494,10 +544,10 @@ img,svg{display:block;max-width:100%}
 
 <!-- AMBIENT BACKGROUND -->
 <div class="bg-wrap" aria-hidden="true">
+  <div class="bg-aurora"></div>
   <div class="bg-grid"></div>
-  <div class="bg-orb bg-orb-gold"></div>
-  <div class="bg-orb bg-orb-grn"></div>
-  <div class="bg-orb bg-orb-mid"></div>
+  <canvas id="particleCanvas"></canvas>
+  <div class="bg-noise"></div>
 </div>
 
 <div class="page">
@@ -1577,41 +1627,47 @@ function speak(text, onEnd) {
   window.speechSynthesis.speak(u);
 }
 
-// STT state
+// ── STATE ──
 let recognition = null;
 let isCallActive = false;
+let isListening = false;
 let isSpeaking = false;
+let listenTimer = null;
 let msgIdx = 0;
+const MAX_SILENCE_MS = 8000; // auto-stop after 8s silence
+
+// ── RESPONSES — complete natural Marathi sentences ──
+// (already defined in SARTHI_RESPONSES above)
 
 function getReply(text) {
   const l = text.toLowerCase();
-  if (/site|kaam|progress|shinde|kulkarni|patil|update|status|office/.test(l)) return SARTHI_RESPONSES.site;
-  if (/payment|paise|due|borje|outstanding|hazaar|lakh|rupay/.test(l)) return SARTHI_RESPONSES.payment;
-  if (/worker|manase|labour|employee|kaiti|kitne|site war/.test(l)) return SARTHI_RESPONSES.worker;
-  if (/schedule|plan|aaj|today|morning|savali|9|nav|das/.test(l)) return SARTHI_RESPONSES.schedule;
-  if (/lead|enquiry|nava|interior|ghar|karavyach|renovation/.test(l)) return SARTHI_RESPONSES.lead;
+  if (/site|kaam|progress|shinde|kulkarni|patil|update|status|office|bungalow/.test(l)) return SARTHI_RESPONSES.site;
+  if (/payment|paise|due|borje|outstanding|hazaar|lakh|rupay|paisa/.test(l)) return SARTHI_RESPONSES.payment;
+  if (/worker|manase|labour|employee|kaiti|kitne|site\s*var|kitne log/.test(l)) return SARTHI_RESPONSES.worker;
+  if (/schedule|plan|aaj|today|morning|savali|9|nav|das|timetable/.test(l)) return SARTHI_RESPONSES.schedule;
+  if (/lead|enquiry|nava|interior|ghar|karavyach|renovation|client/.test(l)) return SARTHI_RESPONSES.lead;
   return SARTHI_RESPONSES.default[msgIdx++ % SARTHI_RESPONSES.default.length];
 }
 
-function setCallStatus(text, color) {
+// ── UI HELPERS ──
+function setStatus(text, color) {
   const el = document.getElementById('callStatusText');
   if (el) { el.textContent = text; el.style.color = color || 'var(--t2)'; }
 }
 
-function setAvatarState(state) {
+function setAvatar(state) {
   const av = document.getElementById('callAvatar');
-  const wrap = av ? av.closest('[style*="position:relative"]') : null;
   if (!av) return;
-  if (state === 'active') {
-    av.style.boxShadow = '0 0 0 8px rgba(124,58,237,.15)';
-    av.style.background = 'linear-gradient(135deg,#7C3AED,#4338CA)';
-  } else if (state === 'speaking') {
-    av.style.boxShadow = '0 0 0 12px rgba(22,163,74,.15)';
-    av.style.background = 'linear-gradient(135deg,#16A34A,#15803D)';
-  } else {
-    av.style.boxShadow = 'none';
-    av.style.background = 'linear-gradient(135deg,var(--pur),#4338CA)';
-  }
+  const states = {
+    idle:     { shadow: 'none',                              bg: 'linear-gradient(135deg,var(--pur),#4338CA)' },
+    listening:{ shadow: '0 0 0 10px rgba(124,58,237,.18)',   bg: 'linear-gradient(135deg,#7C3AED,#4338CA)' },
+    speaking: { shadow: '0 0 0 12px rgba(22,163,74,.2)',     bg: 'linear-gradient(135deg,#16A34A,#15803D)' },
+    thinking: { shadow: '0 0 0 8px rgba(202,138,4,.2)',      bg: 'linear-gradient(135deg,var(--gold),var(--ora))' }
+  };
+  const s = states[state] || states.idle;
+  av.style.boxShadow = s.shadow;
+  av.style.background = s.bg;
+  av.style.transition = 'all 400ms ease';
 }
 
 function showWave(show) {
@@ -1619,25 +1675,22 @@ function showWave(show) {
   if (w) w.style.display = show ? 'flex' : 'none';
 }
 
-function addChatMsg(text, isAi, lang) {
+function addMsg(text, isAi, lang) {
   const msgs = document.getElementById('chatMsgs');
   if (!msgs) return;
   const d = document.createElement('div');
   d.className = 'call-msg ' + (isAi ? 'call-msg-ai' : 'call-msg-user');
-  const now = new Date();
-  const t = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  const t = new Date().getHours()+':'+String(new Date().getMinutes()).padStart(2,'0');
   d.innerHTML = (isAi ? '<div class="call-msg-lang">'+(lang||'SARTHI · Marathi')+'</div>' : '') +
-                text.replace(/\n/g,'<br>') +
-                '<div class="call-msg-time">'+t+'</div>';
+    text + '<div class="call-msg-time">'+t+'</div>';
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function addWANotif(text) {
+function addWA(text) {
   const wa = document.getElementById('waMsgs');
   if (!wa) return;
-  const now = new Date();
-  const t = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  const t = new Date().getHours()+':'+String(new Date().getMinutes()).padStart(2,'0');
   const d = document.createElement('div');
   d.className = 'wa-msg wa-msg-in';
   d.innerHTML = '<div style="font-size:12px">'+text+'</div><div class="wa-time">'+t+' <span class="wa-tick">✓✓</span></div>';
@@ -1645,129 +1698,308 @@ function addWANotif(text) {
   wa.scrollTop = wa.scrollHeight;
 }
 
-function handleUserSpeech(text) {
-  if (!text.trim()) return;
-  addChatMsg(text, false);
-
-  // Typing indicator
+function showTyping() {
+  removeTyping();
   const msgs = document.getElementById('chatMsgs');
-  const typing = document.createElement('div');
-  typing.id = 'typing';
-  typing.className = 'typing-indicator';
-  typing.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-  if (msgs) { msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight; }
+  if (!msgs) return;
+  const d = document.createElement('div');
+  d.id = 'sarthi-typing';
+  d.className = 'typing-indicator';
+  d.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
 
-  setCallStatus('SARTHI Vicharato...', 'var(--gold)');
-  setAvatarState('speaking');
-  showWave(true);
+function removeTyping() {
+  const el = document.getElementById('sarthi-typing');
+  if (el) el.remove();
+}
+
+// ── SPEAK — TTS with proper end detection ──
+function speak(text, onDone) {
+  if (!window.speechSynthesis) { if(onDone) onDone(); return; }
+  isSpeaking = true;
+  window.speechSynthesis.cancel();
+
+  // Wait for cancel to settle
+  setTimeout(() => {
+    const u = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const v = voices.find(v => v.lang === 'hi-IN') ||
+              voices.find(v => v.lang.startsWith('hi')) ||
+              voices.find(v => v.lang === 'mr') ||
+              voices[0];
+    if (v) u.voice = v;
+    u.lang = 'hi-IN';
+    u.rate = 0.88;   // slightly slower — more natural
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    // Fallback timeout — if onend never fires (browser bug)
+    let ended = false;
+    const fallback = setTimeout(() => {
+      if (!ended) { ended = true; isSpeaking = false; if(onDone) onDone(); }
+    }, text.length * 80 + 2000); // estimate speech duration
+
+    u.onend = () => {
+      if (!ended) {
+        ended = true;
+        clearTimeout(fallback);
+        isSpeaking = false;
+        if (onDone) onDone();
+      }
+    };
+    u.onerror = () => {
+      if (!ended) {
+        ended = true;
+        clearTimeout(fallback);
+        isSpeaking = false;
+        if (onDone) onDone();
+      }
+    };
+
+    window.speechSynthesis.speak(u);
+  }, 150);
+}
+
+// ── HANDLE USER INPUT ──
+function handleSpeech(text) {
+  if (!text || !text.trim() || isSpeaking) return;
+  clearTimeout(listenTimer);
+  isListening = false;
+  if (recognition) { try { recognition.stop(); } catch(e){} }
+
+  addMsg(text, false);
+  showTyping();
+  setStatus('SARTHI vicharato...', 'var(--gold)');
+  setAvatar('thinking');
+  showWave(false);
 
   setTimeout(() => {
+    removeTyping();
     const reply = getReply(text);
-    const tyEl = document.getElementById('typing');
-    if (tyEl) tyEl.remove();
-    addChatMsg(reply, true);
-    addWANotif('SARTHI ne respond kela: "'+text.substring(0,30)+(text.length>30?'...':'')+'"');
+    addMsg(reply, true);
+    addWA('Interaction: "' + text.substring(0,28) + (text.length>28?'...':"") + '" — responded');
+    setStatus('SARTHI boltoy...', 'var(--grn)');
+    setAvatar('speaking');
+    showWave(true);
+
     speak(reply, () => {
+      showWave(false);
       if (isCallActive) {
-        setAvatarState('active');
-        showWave(false);
-        setCallStatus('Tumhi Bola — SARTHI Aikto', 'var(--pur)');
+        setAvatar('listening');
+        setStatus('Tumhi bola — SARTHI aikto', 'var(--pur)');
         startListening();
       }
     });
-  }, 600);
+  }, 500);
 }
 
+// ── LISTEN — with auto-stop + no-loop guard ──
 function startListening() {
-  if (!isCallActive) return;
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) { setCallStatus('Browser support nahi — Chrome vapara', 'var(--red)'); return; }
+  if (!isCallActive || isSpeaking || isListening) return;
 
-  recognition = new SpeechRec();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { setStatus('Chrome vapara mic sathi', 'var(--red)'); return; }
+
+  isListening = true;
+  recognition = new SR();
   recognition.lang = 'hi-IN';
   recognition.continuous = false;
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
-  recognition.onresult = (e) => {
-    const t = e.results[0][0].transcript;
-    handleUserSpeech(t);
-  };
-  recognition.onerror = (e) => {
-    if (e.error === 'no-speech') { if (isCallActive) startListening(); return; }
-    if (e.error === 'not-allowed') { setCallStatus('Mic permission nahi dili', 'var(--red)'); endCall(); }
-  };
-  recognition.onend = () => { /* handled in onresult */ };
+  // Auto-stop after MAX_SILENCE_MS of silence
+  listenTimer = setTimeout(() => {
+    if (isListening && isCallActive && !isSpeaking) {
+      isListening = false;
+      try { recognition.stop(); } catch(e){}
+      // Prompt user gently — not a loop, one-time nudge
+      setStatus('Kahi bolaysache aahe ka?', 'var(--t2)');
+      setTimeout(() => {
+        if (isCallActive && !isSpeaking) {
+          setStatus('Tumhi bola — SARTHI aikto', 'var(--pur)');
+          startListening(); // restart ONCE after nudge
+        }
+      }, 3000);
+    }
+  }, MAX_SILENCE_MS);
 
-  try { recognition.start(); } catch(e) {}
+  recognition.onresult = (e) => {
+    clearTimeout(listenTimer);
+    isListening = false;
+    const t = e.results[0][0].transcript;
+    if (t && t.trim().length > 1) handleSpeech(t);
+    else if (isCallActive && !isSpeaking) {
+      setTimeout(() => startListening(), 800);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    clearTimeout(listenTimer);
+    isListening = false;
+    if (e.error === 'no-speech') {
+      if (isCallActive && !isSpeaking) setTimeout(() => startListening(), 1000);
+      return;
+    }
+    if (e.error === 'not-allowed') { setStatus('Mic permission nahi — browser settings check kara', 'var(--red)'); endCall(); return; }
+    if (e.error === 'aborted') return; // intentional stop, ignore
+    if (isCallActive && !isSpeaking) setTimeout(() => startListening(), 1500);
+  };
+
+  recognition.onend = () => {
+    clearTimeout(listenTimer);
+    isListening = false;
+    // Only restart if call active, not speaking, and no result triggered handleSpeech
+  };
+
+  try { recognition.start(); }
+  catch(err) { isListening = false; setTimeout(() => startListening(), 1000); }
 }
 
+// ── CALL CONTROLS ──
 function startCall() {
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) {
-    alert('Tumcha browser voice support karat nahi. Google Chrome vapara.');
-    return;
-  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Google Chrome vapara — voice support saathi.'); return; }
+
   isCallActive = true;
+  isSpeaking = false;
+  isListening = false;
+
   document.getElementById('btnCall').style.display = 'none';
   document.getElementById('btnEnd').style.display = 'flex';
-  setAvatarState('active');
+  setAvatar('speaking');
   showWave(true);
 
-  const greeting = "Namaskar! Mi SARTHI boltoy — Nirmala Associates cha AI Personal Assistant. Sahaj Sir aata site war ahet. Mi tumchi madad karu shakto. Kahi pan vicharaa — site update, payments, workers, ya schedule.";
-  setCallStatus('SARTHI Boltoye...', 'var(--grn)');
-  addChatMsg(greeting, true, 'SARTHI · Marathi');
-  addWANotif('SARTHI Call Started — Client connected');
+  const greeting = "Namaskar! Mi SARTHI boltoy. Nirmala Associates cha AI Personal Assistant. Sahaj Sir aata site var ahet, pan mi tumchi poorn madad karu shakto. Site update, payments, workers attendance, ya schedule — kahi pan vicharaa.";
+  setStatus('SARTHI boltoy...', 'var(--grn)');
+  addMsg(greeting, true, 'SARTHI · Marathi');
+  addWA('SARTHI call started — client connected to Nirmala Associates');
 
   speak(greeting, () => {
-    if (isCallActive) {
-      setCallStatus('Tumhi Bola — SARTHI Aikto', 'var(--pur)');
-      setAvatarState('active');
-      showWave(false);
-      startListening();
-    }
+    if (!isCallActive) return;
+    showWave(false);
+    setAvatar('listening');
+    setStatus('Tumhi bola — SARTHI aikto', 'var(--pur)');
+    startListening();
   });
 }
 
 function endCall() {
   isCallActive = false;
-  if (recognition) { try { recognition.stop(); recognition.abort(); } catch(e){} recognition = null; }
+  isSpeaking = false;
+  isListening = false;
+  clearTimeout(listenTimer);
   window.speechSynthesis.cancel();
-  setAvatarState('idle');
+  if (recognition) { try { recognition.stop(); recognition.abort(); } catch(e){} recognition = null; }
+  setAvatar('idle');
   showWave(false);
-  setCallStatus('Call Ended', 'var(--t3)');
+  setStatus('Call Sampli', 'var(--t3)');
   document.getElementById('btnCall').style.display = 'flex';
   document.getElementById('btnEnd').style.display = 'none';
-  addChatMsg('--- Call Completed ---', true, 'System');
-  addWANotif('Call ended. SARTHI summary Sahaj Dada la pathawato...');
+  addMsg('— Call Sampli. SARTHI ne Sahaj Dada la summary pathawli. —', true, 'System');
+  addWA('Call ended. Summary: ' + document.getElementById('chatMsgs').querySelectorAll('.call-msg-user').length + ' interactions logged.');
 }
 
 function injectScenario(type) {
-  const queries = {
-    site: 'aajchi site update sangaa',
-    payment: 'pending payments kiti aahet',
-    worker: 'aaj site war kiti workers ahet',
-    schedule: 'aajcha schedule sangaa',
-    lead: 'nava lead aahe'
+  if (isSpeaking) return; // don't interrupt
+  const q = {
+    site: 'Aajchi site update sangaa',
+    payment: 'Pending payments kiti aahet?',
+    worker: 'Aaj site var kiti workers ahet?',
+    schedule: 'Aajcha schedule sangaa',
+    lead: 'Nava lead aahe — portfolio pathawa'
   };
-  if (!isCallActive) {
-    // If call not active, simulate text-only
-    handleUserSpeech(queries[type] || 'Hello SARTHI');
-  } else {
-    handleUserSpeech(queries[type] || 'Hello SARTHI');
-  }
+  handleSpeech(q[type] || 'Namaskar SARTHI');
 }
 
-// Init voices on load
-window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+// Preload voices
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 
-// Keep text input working too
-document.getElementById('chatInput').addEventListener('keydown', e => {
+// Text input fallback
+const inp = document.getElementById('chatInput');
+if (inp) inp.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     const v = e.target.value.trim();
-    if (v) { handleUserSpeech(v); e.target.value = ''; }
+    if (v) { handleSpeech(v); e.target.value = ''; }
   }
 });
+
+/* ══ PARTICLE CANVAS — floating dots depth effect ══ */
+(function(){
+  const canvas = document.getElementById('particleCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles=[], animId;
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function mkParticle(){
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*1.8+0.3,
+      vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
+      o: Math.random()*.4+.05,
+      c: Math.random()<.5 ? '202,138,4' : Math.random()<.5 ? '124,58,237' : '5,150,105'
+    };
+  }
+
+  for(let i=0;i<55;i++) particles.push(mkParticle());
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<-5) p.x=W+5; if(p.x>W+5) p.x=-5;
+      if(p.y<-5) p.y=H+5; if(p.y>H+5) p.y=-5;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba('+p.c+','+p.o+')';
+      ctx.fill();
+    });
+    // faint connecting lines between close particles
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle='rgba(202,138,4,'+(0.06*(1-dist/100))+')';
+          ctx.lineWidth=.4;
+          ctx.stroke();
+        }
+      }
+    }
+    animId=requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ 3D TILT on cards ══ */
+document.querySelectorAll('.card,.sys-card,.price-card,.uc-card,.stat-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    card.style.transform = `perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-3px)`;
+    card.style.transition = 'transform 100ms ease';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+    card.style.transition = 'transform 400ms ease';
+  });
+});
+
 </script>
 </body>
 </html>
