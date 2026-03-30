@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ads4you — AI Voice Agent for Indian MSMEs | Never Miss a Call Again</title>
+    <meta name="description" content="AI Voice Agent as a Service for Indian MSMEs. Answer every call in Hindi, Marathi, Tamil & more. 24/7 automated phone agent for small businesses. Book appointments, qualify leads, never lose a customer.">
+    <meta name="keywords" content="AI voice agent India, MSME automation, AI phone answering India, missed calls small business, Hindi AI agent, Marathi AI voice agent, automated calling service India">
+    <meta property="og:title" content="ads4you — AI Voice Agent for Indian MSMEs">
+    <meta property="og:description" content="Stop losing customers to missed calls. AI voice agents that speak your customer's language. Starting ₹2,999/month.">
+    <meta property="og:type" content="website">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6C3CE1;
+            --primary-dark: #5228C0;
+            --accent: #00D4AA;
+            --dark: #0F0F1A;
+            --dark2: #1A1A2E;
+            --text: #E0E0E0;
+            --text-muted: #8888AA;
+            --white: #FFFFFF;
+            --gradient: linear-gradient(135deg, #6C3CE1, #00D4AA);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* NAV */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(15,15,26,0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(108,60,225,0.2);
+            padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--white); }
+        .logo span { color: var(--accent); }
+        .nav-cta {
+            background: var(--gradient); color: var(--white);
+            padding: 0.6rem 1.5rem; border-radius: 8px;
+            text-decoration: none; font-weight: 600; font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+        .nav-cta:hover { transform: scale(1.05); }
+        
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: radial-gradient(ellipse at 50% 0%, rgba(108,60,225,0.15) 0%, transparent 70%);
+        }
+        .badge {
+            display: inline-block; padding: 0.4rem 1rem; border-radius: 20px;
+            background: rgba(108,60,225,0.2); border: 1px solid rgba(108,60,225,0.4);
+            font-size: 0.85rem; color: var(--accent); margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
+            color: var(--white); max-width: 800px; margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .hero h1 .highlight {
+            background: var(--gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p {
+            font-size: 1.2rem; color: var(--text-muted);
+            max-width: 600px; margin-bottom: 2.5rem;
+        }
+        .hero-cta {
+            display: inline-block; padding: 1rem 2.5rem; border-radius: 12px;
+            background: var(--gradient); color: var(--white);
+            text-decoration: none; font-weight: 700; font-size: 1.1rem;
+            box-shadow: 0 4px 30px rgba(108,60,225,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 40px rgba(108,60,225,0.6); }
+        .hero-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+        
+        /* STATS */
+        .stats {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem;
+            padding: 4rem 2rem; background: var(--dark2);
+        }
+        .stat { text-align: center; }
+        .stat-num { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.3rem; }
+        
+        /* PAIN */
+        .pain {
+            padding: 5rem 2rem; text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%);
+        }
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800;
+            color: var(--white); margin-bottom: 1rem;
+        }
+        .section-sub { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 3rem; }
+        .pain-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem; max-width: 900px; margin: 0 auto;
+        }
+        .pain-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 2rem; text-align: left;
+            transition: border-color 0.3s;
+        }
+        .pain-card:hover { border-color: rgba(108,60,225,0.4); }
+        .pain-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .pain-card h3 { color: var(--white); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .pain-card p { color: var(--text-muted); font-size: 0.95rem; }
+        
+        /* SOLUTION */
+        .solution {
+            padding: 5rem 2rem; text-align: center;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0,212,170,0.05) 0%, transparent 70%);
+        }
+        .how-it-works {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 2rem; max-width: 1000px; margin: 3rem auto 0;
+        }
+        .step {
+            flex: 1; min-width: 200px; max-width: 220px;
+            position: relative; text-align: center;
+        }
+        .step-num {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--gradient); color: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.2rem; margin: 0 auto 1rem;
+        }
+        .step h3 { color: var(--white); margin-bottom: 0.5rem; }
+        .step p { color: var(--text-muted); font-size: 0.9rem; }
+        
+        /* FEATURES */
+        .features {
+            padding: 5rem 2rem; background: var(--dark2);
+        }
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; max-width: 1000px; margin: 3rem auto 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px; padding: 2rem;
+        }
+        .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .feature h3 { color: var(--white); margin-bottom: 0.5rem; }
+        .feature p { color: var(--text-muted); font-size: 0.95rem; }
+        
+        /* PRICING */
+        .pricing {
+            padding: 5rem 2rem; text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%);
+        }
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; max-width: 950px; margin: 3rem auto 0;
+        }
+        .price-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 2.5rem 2rem; text-align: center;
+            position: relative; transition: transform 0.3s, border-color 0.3s;
+        }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card.popular {
+            border-color: var(--accent);
+            background: rgba(0,212,170,0.05);
+        }
+        .popular-tag {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: var(--dark); padding: 0.3rem 1rem;
+            border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+        }
+        .price-card h3 { color: var(--white); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .price-card .price { font-size: 2.5rem; font-weight: 800; color: var(--accent); margin: 1rem 0; }
+        .price-card .price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+        .price-card ul { list-style: none; text-align: left; margin: 1.5rem 0; }
+        .price-card li { padding: 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; }
+        .price-card li::before { content: "✓ "; color: var(--accent); font-weight: 700; }
+        .price-btn {
+            display: inline-block; width: 100%; padding: 0.9rem;
+            border-radius: 10px; text-decoration: none; font-weight: 700;
+            margin-top: 1rem; transition: all 0.2s;
+        }
+        .price-btn.primary { background: var(--gradient); color: var(--white); }
+        .price-btn.secondary {
+            background: transparent; color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        .price-btn:hover { opacity: 0.9; transform: scale(1.02); }
+        
+        /* CASE STUDY */
+        .case-study {
+            padding: 5rem 2rem; text-align: center;
+            background: radial-gradient(ellipse at 50% 50%, rgba(108,60,225,0.08) 0%, transparent 70%);
+        }
+        .case-card {
+            max-width: 700px; margin: 3rem auto 0;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 3rem; text-align: left;
+        }
+        .case-card h3 { color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
+        .case-card h2 { color: var(--white); font-size: 1.5rem; margin-bottom: 1rem; }
+        .case-card p { color: var(--text-muted); margin-bottom: 1.5rem; }
+        .case-metrics { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .metric { text-align: center; }
+        .metric-val { font-size: 2rem; font-weight: 800; color: var(--accent); }
+        .metric-label { font-size: 0.8rem; color: var(--text-muted); }
+        
+        /* CTA */
+        .final-cta {
+            padding: 5rem 2rem; text-align: center;
+            background: var(--dark2);
+        }
+        .final-cta h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); color: var(--white); margin-bottom: 1rem; }
+        .final-cta p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem; }
+        
+        /* FOOTER */
+        footer {
+            padding: 2rem; text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        footer p { color: var(--text-muted); font-size: 0.85rem; }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1rem; }
+            .hero { padding: 5rem 1.5rem 3rem; }
+            .stats { gap: 1.5rem; }
+            .case-metrics { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">ads<span>4you</span></div>
+    <a href="#pricing" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="badge">🇮🇳 Built for Indian MSMEs</div>
+    <h1>Your customers are calling.<br><span class="highlight">Who's answering?</span></h1>
+    <p>AI voice agents that speak Hindi, Marathi, Tamil & more. Answer every call, book every appointment, lose zero customers — 24/7.</p>
+    <a href="#pricing" class="hero-cta">Start Free Trial →</a>
+    <p class="hero-sub">No credit card required • Deploy in 48 hours • Cancel anytime</p>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+    <div class="stat">
+        <div class="stat-num">63 Cr+</div>
+        <div class="stat-label">MSMEs in India</div>
+    </div>
+    <div class="stat">
+        <div class="stat-num">62%</div>
+        <div class="stat-label">Calls go unanswered</div>
+    </div>
+    <div class="stat">
+        <div class="stat-num">85%</div>
+        <div class="stat-label">Won't leave voicemail</div>
+    </div>
+    <div class="stat">
+        <div class="stat-num">₹0</div>
+        <div class="stat-label">Revenue from missed calls</div>
+    </div>
+</section>
+
+<!-- PAIN -->
+<section class="pain">
+    <h2 class="section-title">Sound familiar?</h2>
+    <p class="section-sub">Every missed call is a customer calling your competitor.</p>
+    <div class="pain-grid">
+        <div class="pain-card">
+            <div class="pain-icon">📞</div>
+            <h3>"I was with a client, missed 5 calls"</h3>
+            <p>You're busy doing the work. Meanwhile, new customers call, get voicemail, and move on to the next business.</p>
+        </div>
+        <div class="pain-card">
+            <div class="pain-icon">🌙</div>
+            <h3>"After-hours calls are dead leads"</h3>
+            <p>Your customer's AC breaks at 10 PM. They call you. No answer. They call your competitor. Job gone.</p>
+        </div>
+        <div class="pain-card">
+            <div class="pain-icon">🗣️</div>
+            <h3>"My customers speak Hindi/Marathi/Tamil"</h3>
+            <p>English-only solutions don't work. Your customers want to speak their language. Most AI tools can't.</p>
+        </div>
+        <div class="pain-card">
+            <div class="pain-icon">💸</div>
+            <h3>"Can't afford a receptionist"</h3>
+            <p>A full-time receptionist costs ₹15,000-25,000/month. Most MSMEs can't justify it. So calls keep getting missed.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution">
+    <h2 class="section-title">Meet your AI Voice Agent</h2>
+    <p class="section-sub">Deployed in 48 hours. Speaks your customer's language. Costs less than a phone bill.</p>
+    <div class="how-it-works">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h3>Customer Calls</h3>
+            <p>AI answers in 2 rings. Natural conversation in Hindi, Marathi, Tamil, or any Indian language.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h3>AI Understands</h3>
+            <p>Qualifies the lead, answers FAQs, checks availability — just like a trained receptionist.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h3>Action Taken</h3>
+            <p>Books appointment, logs the lead, or routes urgent calls to you. Automatically.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <h3>You Get Notified</h3>
+            <p>Instant WhatsApp/SMS summary. Caller name, need, action taken. You're always in the loop.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <div style="text-align:center;">
+        <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+        <p class="section-sub">Built for Indian MSMEs, not Silicon Valley startups.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature">
+            <div class="feature-icon">🇮🇳</div>
+            <h3>Multi-Language Support</h3>
+            <p>Hindi, Marathi, Tamil, Telugu, Kannada, Bengali, Gujarati — your customer's preferred language, not just English.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">⏰</div>
+            <h3>24/7 Availability</h3>
+            <p>Night, weekends, holidays — your AI agent never sleeps, never takes a sick day, never goes on leave.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📱</div>
+            <h3>WhatsApp Integration</h3>
+            <p>Call summaries sent to your WhatsApp instantly. Follow up with one tap. India's #1 communication channel.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📅</div>
+            <h3>Auto Appointment Booking</h3>
+            <p>AI checks your calendar and books appointments directly. No back-and-forth. No missed slots.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🔄</div>
+            <h3>Smart Call Routing</h3>
+            <p>Urgent calls forwarded to you. Regular inquiries handled by AI. You decide what's urgent.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📊</div>
+            <h3>Call Analytics</h3>
+            <p>Track every call: who called, what they wanted, peak hours, missed vs answered. Data to grow your business.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+    <h2 class="section-title">Simple pricing. No surprises.</h2>
+    <p class="section-sub">Cheaper than a receptionist. More reliable than a human.</p>
+    <div class="pricing-grid">
+        <!-- STARTER -->
+        <div class="price-card">
+            <h3>Starter</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;">For solo businesses</p>
+            <div class="price">₹2,999<span>/month</span></div>
+            <ul>
+                <li>1 AI voice agent</li>
+                <li>1 language (Hindi OR English)</li>
+                <li>Up to 200 calls/month</li>
+                <li>WhatsApp notifications</li>
+                <li>Basic call logging</li>
+                <li>Email support</li>
+            </ul>
+            <a href="https://wa.me/917799368960?text=Hi%20ads4you%2C%20I%20want%20the%20Starter%20plan" class="price-btn secondary">Start Free Trial</a>
+        </div>
+        <!-- GROWTH -->
+        <div class="price-card popular">
+            <div class="popular-tag">MOST POPULAR</div>
+            <h3>Growth</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;">For growing businesses</p>
+            <div class="price">₹5,999<span>/month</span></div>
+            <ul>
+                <li>1 AI voice agent</li>
+                <li>Up to 3 languages</li>
+                <li>Up to 500 calls/month</li>
+                <li>WhatsApp + SMS notifications</li>
+                <li>Appointment booking</li>
+                <li>Call analytics dashboard</li>
+                <li>Priority support</li>
+                <li>Custom greetings & scripts</li>
+            </ul>
+            <a href="https://wa.me/917799368960?text=Hi%20ads4you%2C%20I%20want%20the%20Growth%20plan" class="price-btn primary">Start Free Trial</a>
+        </div>
+        <!-- BUSINESS -->
+        <div class="price-card">
+            <h3>Business</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;">For established MSMEs</p>
+            <div class="price">₹9,999<span>/month</span></div>
+            <ul>
+                <li>Up to 3 AI voice agents</li>
+                <li>All Indian languages</li>
+                <li>Unlimited calls</li>
+                <li>CRM integration</li>
+                <li>Advanced analytics</li>
+                <li>Call recording & transcripts</li>
+                <li>Dedicated account manager</li>
+                <li>Custom AI training</li>
+            </ul>
+            <a href="https://wa.me/917799368960?text=Hi%20ads4you%2C%20I%20want%20the%20Business%20plan" class="price-btn secondary">Contact Sales</a>
+        </div>
+    </div>
+    <p style="color:var(--text-muted); margin-top:2rem; font-size:0.85rem;">All plans include: 7-day free trial • No setup fees • Cancel anytime • GST extra</p>
+</section>
+
+<!-- CASE STUDY -->
+<section class="case-study">
+    <h2 class="section-title">Proven results. Real businesses.</h2>
+    <p class="section-sub">Don't take our word for it. See the numbers.</p>
+    <div class="case-card">
+        <h3>Case Study</h3>
+        <h2>Nirmala Associates — Latur, Maharashtra</h2>
+        <p>Property firm struggling with missed calls from Marathi-speaking clients. Agents were busy with site visits. Every missed call = a lost property inquiry.</p>
+        <p><strong>Solution:</strong> SARTHI — a custom Marathi AI voice agent deployed by ads4you. Answers every call in natural Marathi, qualifies property inquiries, books site visits, and sends summaries to the team via WhatsApp.</p>
+        <div class="case-metrics">
+            <div class="metric">
+                <div class="metric-val">0</div>
+                <div class="metric-label">Missed calls since deployment</div>
+            </div>
+            <div class="metric">
+                <div class="metric-val">24/7</div>
+                <div class="metric-label">Availability</div>
+            </div>
+            <div class="metric">
+                <div class="metric-val">100%</div>
+                <div class="metric-label">Marathi language accuracy</div>
+            </div>
+            <div class="metric">
+                <div class="metric-val">↑</div>
+                <div class="metric-label">More site visits booked</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+    <h2>Stop losing customers to voicemail.</h2>
+    <p>Your AI voice agent is 48 hours away. Start your free trial today.</p>
+    <a href="https://wa.me/917799368960?text=Hi%20ads4you%2C%20I%20want%20to%20start%20my%20free%20trial" class="hero-cta">Start Free Trial →</a>
+    <p class="hero-sub" style="margin-top:1rem;">Or call us: +91 7799368960</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 ads4you AI Automation Studio • MSME Registered • Wakad, Pune, India</p>
+    <p style="margin-top:0.5rem;">Built with ❤️ for Indian small businesses</p>
+</footer>
+
+</body>
+</html>
